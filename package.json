@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "tailwindcss": "^4.1.12",
+    "sqlite3" : "^5.1.7"
+  },
+  "scripts": {
+    "build:css": "tailwindcss -i app/static/css/style.input.css -o app/static/css/style.output.css"
+  }
+}

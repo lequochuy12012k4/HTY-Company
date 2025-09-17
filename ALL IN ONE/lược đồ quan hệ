@@ -1,0 +1,28 @@
+erDiagram
+    User {
+        int id PK
+        string username
+        string password
+        string email
+    }
+
+    Document {
+        int id PK
+        string title
+        string author
+        text description
+        string image
+        string document
+        datetime uploaded_at
+        int user_id FK
+    }
+
+    User_Favorites_Document {
+       int id PK
+       int user_id FK
+       int document_id FK
+    }
+
+    User ||--o{ Document : "tải lên"
+    User ||--|{ User_Favorites_Document : "yêu thích"
+    Document ||--|{ User_Favorites_Document : "được yêu thích bởi"

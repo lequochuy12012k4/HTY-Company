@@ -1,0 +1,109 @@
+{% load static %}
+<nav class="bg-white p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="{% url 'home' %}" class="text-2xl font-bold text-gray-800 mr-8">HTY Company</a>
+
+        {% if user.is_authenticated %}
+        <div class="hidden md:flex flex-grow max-w-md relative items-center">
+            <input type="text" id="search-input" placeholder="Tìm kiếm..." class="w-full p-2 pl-10 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[rgba(234,238,245,1)]">
+            <div class="absolute left-3">
+                <i class="fas fa-search text-gray-400"></i>
+            </div>
+            <div id="search-results" class="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md mt-1 z-10 hidden shadow-lg">
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="hidden md:flex space-x-4 ml-8">
+            {% if user.is_authenticated %}
+                <a href="{% url 'favorites' %}" class="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md hover:bg-gray-100 transition duration-300">Yêu thích</a>
+                <a href="{% url 'profile' %}" class="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md hover:bg-gray-100 transition duration-300">Hồ sơ</a>
+                <a href="{% url 'upload' %}" class="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md hover:bg-gray-100 transition duration-300">Tải lên</a>
+                <a href="{% url 'profile' %}" class="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md hover:bg-gray-100 transition duration-300">{{ user.username }}</a>
+                <a href="{% url 'logout' %}" class="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md hover:bg-gray-100 transition duration-300"><i class="fas fa-sign-out-alt"></i></a>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md hover:bg-gray-100 transition duration-300">Đăng nhập</a>
+            {% endif %}
+        </div>
+
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+          </button>
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden mt-4">
+        {% if user.is_authenticated %}
+        <a href="{% url 'favorites' %}" class="block text-gray-600 hover:text-gray-800 py-2 px-4 hover:bg-gray-100">Yêu thích</a>
+        <a href="{% url 'profile' %}" class="block text-gray-600 hover:text-gray-800 py-2 px-4 hover:bg-gray-100">Hồ sơ</a>
+        <a href="{% url 'upload' %}" class="block text-gray-600 hover:text-gray-800 py-2 px-4 hover:bg-gray-100">Tải lên</a>
+        <a href="{% url 'profile' %}" class="block text-gray-600 hover:text-gray-800 py-2 px-4 hover:bg-gray-100">{{ user.username }}</a>
+        <a href="{% url 'logout' %}" class="block text-gray-600 hover:text-gray-800 py-2 px-4 hover:bg-gray-100"><i class="fas fa-sign-out-alt"></i></a>
+        {% else %}
+        <a href="{% url 'login' %}" class="block text-gray-600 hover:text-gray-800 py-2 px-4 hover:bg-gray-100">Đăng nhập</a>
+        {% endif %}
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const mobileSearchResults = document.getElementById('mobile-search-results');
+        const mobileSearchInputHome = document.getElementById('mobile-search-input-home');
+        const mobileSearchResultsHome = document.getElementById('mobile-search-results-home');
+
+        function setupSearch(input, resultsContainer) {
+            if (!input) return;
+            input.addEventListener('keyup', function() {
+                const query = input.value;
+                if (query.length > 2) {
+                    fetch(`{% url 'search' %}?q=${query}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            resultsContainer.innerHTML = '';
+                            if (data.length > 0) {
+                                data.forEach(doc => {
+                                    const resultItem = document.createElement('a');
+                                    resultItem.href = `/document/${doc.id}/`;
+                                    resultItem.className = 'block p-2 hover:bg-gray-100 border-b';
+                                    resultItem.textContent = doc.title;
+                                    resultsContainer.appendChild(resultItem);
+                                });
+                                resultsContainer.classList.remove('hidden');
+                            } else {
+                                const noResultItem = document.createElement('div');
+                                noResultItem.className = 'p-2 text-gray-500';
+                                noResultItem.textContent = 'No results found';
+                                resultsContainer.appendChild(noResultItem);
+                                resultsContainer.classList.remove('hidden');
+                            }
+                        });
+                } else {
+                    resultsContainer.classList.add('hidden');
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (resultsContainer && !input.contains(event.target) && !resultsContainer.contains(event.target)) {
+                    resultsContainer.classList.add('hidden');
+                }
+            });
+        }
+
+        setupSearch(searchInput, searchResults);
+        setupSearch(mobileSearchInput, mobileSearchResults);
+        setupSearch(mobileSearchInputHome, mobileSearchResultsHome);
+
+        document.getElementById('mobile-menu-button').onclick = function() {
+            var menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
+        };
+    });
+</script>

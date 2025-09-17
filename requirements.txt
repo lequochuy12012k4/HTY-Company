@@ -1,0 +1,6 @@
+asgiref
+Django
+pillow
+python-dotenv
+sqlparse
+whitenoise

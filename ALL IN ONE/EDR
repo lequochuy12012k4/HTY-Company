@@ -1,0 +1,60 @@
+graph TD
+    %% Entities (Thực thể)
+    User["👤 User"]
+    Document["📄 Document"]
+    Author["✍️ Author"]
+
+    %% Relationships (Mối quan hệ)
+    Uploads{"Tải lên"}
+    Favorites{"Yêu thích"}
+    Writes{"Viết"}
+
+    %% Attributes for User (Thuộc tính của User)
+    subgraph User Attributes
+        userID(("id (PK)"))
+        username(("username"))
+        email(("email"))
+        password(("password"))
+    end
+
+    %% Attributes for Document (Thuộc tính của Document)
+    subgraph Document Attributes
+        docID(("id (PK)"))
+        title(("title"))
+        description(("description"))
+        image(("image"))
+        document_file(("document"))
+        uploaded_at(("uploaded_at"))
+    end
+
+    %% Attributes for Author (Thuộc tính của Author)
+    subgraph Author Attributes
+        authorID(("id (PK)"))
+        authorName(("name"))
+    end
+
+    %% Connect entities to relationships with cardinality (Kết nối thực thể và mối quan hệ với bản số)
+    User ---|"1"| Uploads
+    Uploads ---|"N"| Document
+
+    User ---|"M"| Favorites
+    Favorites ---|"N"| Document
+
+    Author ---|"1"| Writes
+    Writes ---|"N"| Document
+
+    %% Connect attributes to entities (Kết nối thuộc tính với thực thể)
+    User -.-> userID
+    User -.-> username
+    User -.-> email
+    User -.-> password
+
+    Document -.-> docID
+    Document -.-> title
+    Document -.-> description
+    Document -.-> image
+    Document -.-> document_file
+    Document -.-> uploaded_at
+
+    Author -.-> authorID
+    Author -.-> authorName

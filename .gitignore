@@ -1,0 +1,6 @@
+.venv
+__pycache__
+.idx
+.env
+node_modules
+.vercel
