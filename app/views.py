@@ -126,6 +126,7 @@ def ProfilePage(request):
     if request.method == 'POST':
         user = request.user
         new_username = request.POST.get('username')
+        old_password = request.POST.get('old_password')
         new_password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
@@ -136,8 +137,12 @@ def ProfilePage(request):
             user.username = new_username
 
         if new_password:
+            if not user.check_password(old_password):
+                messages.error(request, 'Mật khẩu cũ không đúng.')
+                return redirect('profile')
+
             if new_password != confirm_password:
-                messages.error(request, 'Mật khẩu không khớp')
+                messages.error(request, 'Mật khẩu mới không khớp.')
                 return redirect('profile')
             user.set_password(new_password)
 
@@ -157,12 +162,10 @@ def UploadPage(request):
         document = request.FILES.get('file')
 
         if image and image.size > 3 * 1024 * 1024:
-            messages.error(request, 'Kích thước ảnh không được vượt quá 3MB.')
-            return redirect('upload')
+            return JsonResponse({'status': 'error', 'message': 'Kích thước ảnh không được vượt quá 3MB.'})
 
         if document and document.size > 5 * 1024 * 1024:
-            messages.error(request, 'Kích thước tệp không được vượt quá 5MB.')
-            return redirect('upload')
+            return JsonResponse({'status': 'error', 'message': 'Kích thước tệp không được vượt quá 5MB.'})
 
         if title and author_name and description and image and document:
             author_instance, created = Author.objects.get_or_create(name=author_name)
@@ -175,11 +178,10 @@ def UploadPage(request):
                 image=image,
                 document=document
             )
-            messages.success(request, 'Tài liệu đã được tải lên thành công!')
-            return redirect('upload')
+            return JsonResponse({'status': 'success', 'message': 'Tài liệu đã được tải lên thành công!'})
         else:
-            messages.error(request, 'Tài liệu không hợp lệ. Vui lòng kiểm tra lại.')
-            return redirect('upload')
+            return JsonResponse({'status': 'error', 'message': 'Tài liệu không hợp lệ. Vui lòng kiểm tra lại.'})
+            
     return render(request, 'Navbar/UploadPage.html')
 
 @login_required(login_url='login')

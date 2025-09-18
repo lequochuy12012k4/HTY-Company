@@ -11,27 +11,20 @@
 </head>
 <body>
     {% include 'components/layout/Navbar.html' %}
-    {% if messages %}
-    <div class="fixed top-5 right-5 z-50">
-    {% for message in messages %}
-        <div id="message-{{ forloop.counter }}" class="relative mb-4 rounded-md p-4
-            {% if message.tags == 'success' %} bg-green-200 text-green-800 {% endif %}
-            {% if message.tags == 'error' %} bg-red-200 text-red-800 {% endif %}
-            {% if message.tags == 'info' %} bg-blue-200 text-blue-800 {% endif %}
-            {% if message.tags == 'warning' %} bg-yellow-200 text-yellow-800 {% endif %}
-        ">
-            {{ message }}
-            <button type="button" class="absolute top-0 right-0 mt-1 mr-1" onclick="document.getElementById('message-{{ forloop.counter }}').style.display = 'none'">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-    {% endfor %}
-    </div>
-    {% endif %}
+    
     {% block content %}
     {% endblock %}
+    
     {% include 'components/layout/Footer.html' %}
+
+    <script src="{% static 'js/toast.js' %}"></script>
+    
+    {% if messages %}
+    <script>
+        {% for message in messages %}
+            showToast('{{ message }}', '{{ message.tags }}');
+        {% endfor %}
+    </script>
+    {% endif %}
 </body>
 </html>

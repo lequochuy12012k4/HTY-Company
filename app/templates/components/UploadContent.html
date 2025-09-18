@@ -1,6 +1,6 @@
 <div class="container mx-auto mt-8 p-4">
     <h1 class="text-3xl font-semibold text-gray-700 mb-6">Tải tài liệu lên</h1>
-    <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
+    <form id="upload-form" action="{% url 'upload' %}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
         {% csrf_token %}
         <div class="mb-4">
             <label for="title" class="block text-gray-700 font-medium mb-2">Tiêu đề</label>
@@ -27,23 +27,55 @@
 </div>
 
 <script>
-    const imageInput = document.getElementById('image');
-    const fileInput = document.getElementById('file');
-    const submitButton = document.querySelector('button[type="submit"]');
+    document.getElementById('upload-form').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    imageInput.addEventListener('change', () => {
-        const file = imageInput.files[0];
-        if (file && file.size > 3 * 1024 * 1024) {
-            alert('Kích thước ảnh không được vượt quá 3MB.');
-            imageInput.value = '';
-        }
-    });
+        const form = event.target;
+        const formData = new FormData(form);
+        const submitButton = form.querySelector('button[type="submit"]');
+        
+        const imageInput = document.getElementById('image');
+        const fileInput = document.getElementById('file');
+        
+        const imageFile = imageInput.files[0];
+        const pdfFile = fileInput.files[0];
 
-    fileInput.addEventListener('change', () => {
-        const file = fileInput.files[0];
-        if (file && file.size > 5 * 1024 * 1024) {
-            alert('Kích thước tệp không được vượt quá 5MB.');
-            fileInput.value = '';
+        if (imageFile && imageFile.size > 3 * 1024 * 1024) {
+            showToast('Kích thước ảnh không được vượt quá 3MB.', 'error');
+            return;
         }
+
+        if (pdfFile && pdfFile.size > 5 * 1024 * 1024) {
+            showToast('Kích thước tệp không được vượt quá 5MB.', 'error');
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Đang tải lên...';
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showToast(data.message, 'success');
+                form.reset();
+            } else {
+                showToast(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showToast('Đã có lỗi xảy ra khi tải lên. Vui lòng thử lại.', 'error');
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Tải lên';
+        });
     });
 </script>
