@@ -3,7 +3,7 @@
       {
         "name": "Django DB",
         "driver": "SQLite",
-        "database": "/home/user/djangoapp/DjangoApp/db.sqlite3"
+        "database": "/home/user/hty-company/HTY-Company/db.sqlite3"
       }
     ],
     "sqltools.useNodeRuntime": true

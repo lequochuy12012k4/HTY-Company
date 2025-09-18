@@ -25,3 +25,25 @@
         <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Tải lên</button>
     </form>
 </div>
+
+<script>
+    const imageInput = document.getElementById('image');
+    const fileInput = document.getElementById('file');
+    const submitButton = document.querySelector('button[type="submit"]');
+
+    imageInput.addEventListener('change', () => {
+        const file = imageInput.files[0];
+        if (file && file.size > 3 * 1024 * 1024) {
+            alert('Kích thước ảnh không được vượt quá 3MB.');
+            imageInput.value = '';
+        }
+    });
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (file && file.size > 5 * 1024 * 1024) {
+            alert('Kích thước tệp không được vượt quá 5MB.');
+            fileInput.value = '';
+        }
+    });
+</script>

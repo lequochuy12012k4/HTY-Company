@@ -154,8 +154,17 @@ def UploadPage(request):
         author_name = request.POST.get('author')
         description = request.POST.get('description')
         image = request.FILES.get('image')
-        file = request.FILES.get('file')
-        if title and author_name and description and image and file:
+        document = request.FILES.get('file')
+
+        if image and image.size > 3 * 1024 * 1024:
+            messages.error(request, 'Kích thước ảnh không được vượt quá 3MB.')
+            return redirect('upload')
+
+        if document and document.size > 5 * 1024 * 1024:
+            messages.error(request, 'Kích thước tệp không được vượt quá 5MB.')
+            return redirect('upload')
+
+        if title and author_name and description and image and document:
             author_instance, created = Author.objects.get_or_create(name=author_name)
             
             Document.objects.create(
@@ -164,7 +173,7 @@ def UploadPage(request):
                 author=author_instance,
                 description=description,
                 image=image,
-                document=file
+                document=document
             )
             messages.success(request, 'Tài liệu đã được tải lên thành công!')
             return redirect('upload')

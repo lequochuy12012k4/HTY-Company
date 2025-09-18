@@ -55,11 +55,19 @@
         const mobileSearchInputHome = document.getElementById('mobile-search-input-home');
         const mobileSearchResultsHome = document.getElementById('mobile-search-results-home');
 
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
         function setupSearch(input, resultsContainer) {
             if (!input) return;
-            input.addEventListener('keyup', function() {
-                const query = input.value;
-                if (query.length > 2) {
+
+            const debouncedSearch = debounce(function(query) {
+                if (query.length > 0) {
                     fetch(`{% url 'search' %}?q=${query}`)
                         .then(response => response.json())
                         .then(data => {
@@ -84,6 +92,10 @@
                 } else {
                     resultsContainer.classList.add('hidden');
                 }
+            }, 300);
+
+            input.addEventListener('keyup', function() {
+                debouncedSearch(input.value);
             });
 
             document.addEventListener('click', function(event) {
