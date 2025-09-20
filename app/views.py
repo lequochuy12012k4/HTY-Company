@@ -205,6 +205,9 @@ def FavoritePage(request):
     return render(request, 'Navbar/FavoritePage.html', context)
 
 def Search(request):
+    if not request.user.is_authenticated:
+        return JsonResponse([], safe=False)
+
     query = request.GET.get('q')
     if query:
         documents = Document.objects.filter(title__icontains=query).select_related('user', 'author')
