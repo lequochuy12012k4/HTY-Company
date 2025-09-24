@@ -92,8 +92,7 @@ def ForgotPasswordPage(request):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
         reset_link = request.build_absolute_uri(reverse('reset-password', kwargs={'uidb64': uid, 'token': token}))
-
-        messages.success(request, format_html('Liên kết đặt lại mật khẩu của bạn: <a href="{}">{}</a>', reset_link, reset_link))
+        messages.success(request, format_html('<a href="{}">Nhấn cái này để đặt lại mật khẩu</a>', reset_link, reset_link))
         return redirect('forgot-password')
 
     return render(request, 'authentication/ForgotPassword.html')
@@ -178,7 +177,7 @@ def UploadPage(request):
                 image=image,
                 document=document
             )
-            return JsonResponse({'status': 'success', 'message': 'Tài liệu đã được tải lên thành công!'})
+            return JsonResponse({'status': 'success', 'message': f'Tài liệu "{title}" đã được tải lên thành công!'})
         else:
             return JsonResponse({'status': 'error', 'message': 'Tài liệu không hợp lệ. Vui lòng kiểm tra lại.'})
             
@@ -190,10 +189,10 @@ def ToggleFavorite(request, document_id):
     if request.method == 'POST':
         if request.user in document.favorited_by.all():
             document.favorited_by.remove(request.user)
-            messages.success(request, 'Đã xóa khỏi danh sách yêu thích.')
+            messages.success(request, f'Đã xóa "{document.title}" khỏi danh sách yêu thích.')
         else:
             document.favorited_by.add(request.user)
-            messages.success(request, 'Đã thêm vào danh sách yêu thích.')
+            messages.success(request, f'Đã thêm "{document.title}" vào danh sách yêu thích.')
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required(login_url='login')

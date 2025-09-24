@@ -20,6 +20,12 @@
                 <h3 class="text-lg font-bold text-gray-800 mb-2">Hãy <a href="{% url 'login' %}" class="text-blue-500 hover:underline">đăng nhập</a> để xem tài liệu.</h3>
             </div>
         </div>
+        <div class="bg-[rgba(10,35,71,1)] rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="{% static 'images/no_register.png' %}" alt="Login Required" class="w-30 h-30 object-cover">
+            <div class="p-4">
+                <h3 class="text-lg text-white font-bold mb-2">Hãy <a href="{% url 'register' %}" class="text-blue-500 hover:underline">đăng ký</a> nếu chưa có tài khoản</h3>
+            </div>
+        </div>
         {% else %}
             {% for document in documents %}
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
