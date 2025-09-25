@@ -181,7 +181,12 @@ def UploadPage(request):
         else:
             return JsonResponse({'status': 'error', 'message': 'Tài liệu không hợp lệ. Vui lòng kiểm tra lại.'})
             
-    return render(request, 'Navbar/UploadPage.html')
+    else:
+        documents = Document.objects.filter(user=request.user)
+        context = {
+            'documents': documents
+        }
+        return render(request, 'Navbar/UploadPage.html', context)
 
 @login_required(login_url='login')
 def ToggleFavorite(request, document_id):

@@ -24,6 +24,7 @@
                             Tác giả: <a href="{% url 'author-detail' document.author.id %}" class="text-blue-500 hover:underline">{{ document.author.name }}</a>
                         </p>
                         <p class="text-sm text-gray-600 mb-1"><i>Được thêm bởi: {{ document.user.username }}</i></p>
+                        <p class="text-sm text-gray-600 mb-1"><i>Được tải lên lúc: {{ document.created_at }}</i></p>
                         <div class="flex justify-between items-center">
                             <div class="space-x-2">
                                 <a href="{% url 'document-detail' document.id %}" class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-md text-sm transition duration-300">Xem chi tiết</a>

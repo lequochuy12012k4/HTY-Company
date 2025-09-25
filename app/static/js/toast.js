@@ -5,7 +5,7 @@ function showToast(message, status = 'success') {
     toast.id = toastId;
 
     const statusClasses = status === 'success'
-        ? 'bg-green-100 text-green-800'
+        ? 'bg-green-100 text-green-800 font-bold'
         : (status === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800');
 
     toast.className = `fixed top-5 right-5 p-4 rounded-lg shadow-lg flex items-center justify-between max-w-xs sm:max-w-sm z-50 ${statusClasses}`;
