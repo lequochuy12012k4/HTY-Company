@@ -129,7 +129,8 @@ Folder `ALL IN ONE` được dùng để:
      *  Các bảng dữ liệu
      *  EDR
      *  Lược đồ quan hệ
-     *  Phân tích mức độ chuẩn hóa và Rằng buộc chọn vẹn
+     *  Phân tích mức độ chuẩn hóa 
+     *  Rằng buộc chọn vẹn
 
 ## Cảm ơn
 
