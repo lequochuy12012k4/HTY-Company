@@ -1,8 +1,27 @@
 # Ứng dụng Web Quản lý Tài liệu
 
+<p align="center">
+  <img src="app/static/images/icontab.png" alt="Logo ứng dụng" width="150">
+</p>
+
+<h1 align="center">Ứng dụng Web Quản lý Tài liệu</h1>
+
 ## Giới thiệu
 
 Đây là một ứng dụng web được xây dựng bằng Django, cho phép người dùng quản lý, tải lên, và chia sẻ tài liệu. Ứng dụng cung cấp các tính năng như quản lý tài liệu, tác giả, và cho phép người dùng đánh dấu các tài liệu yêu thích.
+
+## Công nghệ sử dụng
+
+*   **Backend:**
+    *   ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+    *   ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+*   **Frontend:**
+    *   ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+    *   ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+    *   ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+    *   ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+*   **Database:**
+    *   ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
 ## Tính năng chính
 
@@ -23,7 +42,7 @@
 
 1.  **Clone repository về máy của bạn:**
     ```bash
-    git clone <URL-repository>
+    git clone https://github.com/lequochuy12012k4/HTY-Company
     ```
 
 2.  **Tạo và kích hoạt môi trường ảo (virtual environment):**
