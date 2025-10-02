@@ -1,10 +1,13 @@
-# Ứng dụng Web Quản lý Tài liệu
-
-<p align="center">
-  <img src="app/static/images/icontab.png" alt="Logo ứng dụng" width="150">
-</p>
-
-<h1 align="center">Ứng dụng Web Quản lý Tài liệu</h1>
+<table>
+  <tr>
+    <td width="100" valign="middle">
+      <img src="app/static/images/icontab.png" alt="Logo ứng dụng" width="100">
+    </td>
+    <td valign="middle">
+      <h1>Ứng dụng Web Quản lý Tài liệu</h1>
+    </td>
+  </tr>
+</table>
 
 ## Giới thiệu
 
