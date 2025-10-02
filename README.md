@@ -123,13 +123,13 @@
 
 ## Ghi chú
 
-Folder ALL IN ONE được dùng để: 
+Folder `ALL IN ONE` được dùng để: 
 *   Làm silde thuyết trình
 *   Làm file word/pdf bao gồm:
-     *   Các bảng dữ liệu
+     *  Các bảng dữ liệu
      *  EDR
-     *  lược đồ quan hệ
-     *  phân tích mức độ chuẩn hóa và Rằng buộc chọn vẹn
+     *  Lược đồ quan hệ
+     *  Phân tích mức độ chuẩn hóa và Rằng buộc chọn vẹn
 
 ## Cảm ơn
 
