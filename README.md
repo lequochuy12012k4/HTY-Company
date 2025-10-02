@@ -125,7 +125,8 @@
 
 Folder `ALL IN ONE` được dùng để: 
 *   Làm silde thuyết trình
-*   Làm file word/pdf bao gồm:
+*   Làm file word/pdf
+*   Bao gồm:
      *  Các bảng dữ liệu
      *  EDR
      *  Lược đồ quan hệ
