@@ -13,19 +13,24 @@
 
 <p>Do website không thể chạy 24/7 nên khi nào cần thì bạn có thể liên hệ tôi qua: </p>
 
-<div align="left">
-<p>
-  <a href="https://www.facebook.com/lequochuy12012k4" target="_blank">
+<table>
+  <tr>
+    <td style="vertical-align: middle;"><a href="https://www.facebook.com/lequochuy12012k4" target="_blank">
     <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook">
-  </a>
-  <strong style="font-size: 1.5em;">Lê Quốc Huy</strong>
-</p>
-<p>
-  <a href="mailto:lequochuy12012k4@gmail.com">
+  </a></td>
+    <td style="vertical-align: middle; padding-left: 10px;"><strong style="font-size: 1.5em;">Lê Quốc Huy</strong></td>
+  </tr>
+  <tr>
+    <td style="vertical-align: middle;"><a href="mailto:lequochuy12012k4@gmail.com">
     <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail">
-  </a>
-  <strong style="font-size: 1.5em;">lequochuy12012k4@gmail.com</strong>
-</p>
+  </a></td>
+    <td style="vertical-align: middle; padding-left: 10px;"><strong style="font-size: 1.5em;">lequochuy12012k4@gmail.com</strong></td>
+  </tr>
+</table>
+
+<div align="center">
+<a href="https://studio.firebase.google.com/github/lequochuy12012k4/HTY-Company" target="_blank"><img src="https://firebase.google.com/images/icons/firebase_studio.png" alt="Open in Firebase Studio" width="180"></a>
+<a href="https://console.firebase.google.com/project/hty-company/hosting/sites/hty-company/deploy?authuser=0&hl=vi" target="_blank"><img src="https://www.gstatic.com/firebasejs/v8.7.1/firebase-hosting-deploy.svg" alt="Deploy to Firebase" width="180"></a>
 </div>
 
 ## Giới thiệu
