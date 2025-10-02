@@ -52,9 +52,9 @@
 
 ### Yêu cầu hệ thống
 
-*   Python 3.x
-*   pip (trình quản lý gói cho Python)
-*   Node.js và npm (để cài đặt và chạy Tailwind CSS)
+*   Python 3.x (tải Python tại <a href="https://www.python.org/ftp/python/3.13.7/python-3.13.7-amd64.exe">đây</a>)
+*   pip (trình quản lý gói cho Python, đã được tải cùng khi tải Python)
+*   Node.js và npm (để cài đặt và chạy Tailwind CSS, tải Nodejs tại <a href="https://nodejs.org/dist/v24.9.0/node-v24.9.0-x64.msi">đây</a> )
 
 ### Các bước cài đặt
 
@@ -118,6 +118,10 @@
 *   `templates/`: Thư mục chứa các template HTML.
 *   `tailwind.config.js`: File cấu hình cho Tailwind CSS.
 *   `package.json`: File định nghĩa các gói và script cho frontend.
+
+## Ghi chú
+
+Folder ALL IN ONE được dùng để cho thuyết trình, làm file word/pdf, bao gồm các bảng dữ liệu, EDR, lược đồ quan hệ, phân tích mức độ chuẩn hóa và Rằng buộc chọn vẹn
 
 ## Cảm ơn
 
