@@ -4,7 +4,7 @@
       <img src="app/static/images/icontab.png" alt="Logo ứng dụng" width="100">
     </td>
     <td valign="middle">
-      <h1>Ứng dụng Web Quản lý Tài liệu</h1>
+      <h1>Web Quản lý tài liệu nội bộ Công ty</h1>
     </td>
   </tr>
 </table>
