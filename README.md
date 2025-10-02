@@ -28,11 +28,6 @@
   </tr>
 </table>
 
-<div align="center">
-<a href="https://studio.firebase.google.com/github/lequochuy12012k4/HTY-Company" target="_blank"><img src="https://firebase.google.com/images/icons/firebase_studio.png" alt="Open in Firebase Studio" width="180"></a>
-<a href="https://console.firebase.google.com/project/hty-company/hosting/sites/hty-company/deploy?authuser=0&hl=vi" target="_blank"><img src="https://www.gstatic.com/firebasejs/v8.7.1/firebase-hosting-deploy.svg" alt="Deploy to Firebase" width="180"></a>
-</div>
-
 ## Giới thiệu
 
 Đây là một ứng dụng web được xây dựng bằng Django, cho phép người dùng quản lý, tải lên, và chia sẻ tài liệu. Ứng dụng cung cấp các tính năng như quản lý tài liệu, tác giả, và cho phép người dùng đánh dấu các tài liệu yêu thích.
