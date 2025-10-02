@@ -123,7 +123,13 @@
 
 ## Ghi chú
 
-Folder ALL IN ONE được dùng để cho thuyết trình, làm file word/pdf, bao gồm các bảng dữ liệu, EDR, lược đồ quan hệ, phân tích mức độ chuẩn hóa và Rằng buộc chọn vẹn
+Folder ALL IN ONE được dùng để: 
+*   Làm silde thuyết trình
+*   Làm file word/pdf bao gồm:
+     *   Các bảng dữ liệu
+     *  EDR
+     *  lược đồ quan hệ
+     *  phân tích mức độ chuẩn hóa và Rằng buộc chọn vẹn
 
 ## Cảm ơn
 
