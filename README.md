@@ -56,6 +56,7 @@
 *   pip (trình quản lý gói cho Python, đã được tải cùng khi tải Python)
 *   Node.js (để cài đặt và chạy Tailwind CSS, tải Nodejs tại <a href="https://nodejs.org/dist/v24.9.0/node-v24.9.0-x64.msi">đây</a> )
 *   npm (trình quản lý gói cho Nodejs, đã được tải cùng khi tải Nodejs)
+*   Git (để clone source code từ Github, tải Git tại <a href="https://git-scm.com/downloads/win">đây</a> )
 
 ### Các bước cài đặt
 
