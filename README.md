@@ -52,8 +52,10 @@
 
 ### Yêu cầu hệ thống
 
-*   Python 3.x và pip (tải Python tại <a href="https://www.python.org/ftp/python/3.13.7/python-3.13.7-amd64.exe">đây</a>, nhớ tick phần "Add to PATH" khi cài đặt Python)
-*   Node.js và npm (để cài đặt và chạy Tailwind CSS, tải Nodejs tại <a href="https://nodejs.org/dist/v24.9.0/node-v24.9.0-x64.msi">đây</a> )
+*   Python 3.x (tải Python tại <a href="https://www.python.org/ftp/python/3.13.7/python-3.13.7-amd64.exe">đây</a>, nhớ tick phần "Add to PATH" khi cài đặt Python)
+*   pip (trình quản lý gói cho Python, đã được tải cùng khi tải Python)
+*   Node.js (để cài đặt và chạy Tailwind CSS, tải Nodejs tại <a href="https://nodejs.org/dist/v24.9.0/node-v24.9.0-x64.msi">đây</a> )
+*   npm (trình quản lý gói cho Nodejs, đã được tải cùng khi tải Nodejs)
 
 ### Các bước cài đặt
 
