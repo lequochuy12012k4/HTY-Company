@@ -127,3 +127,18 @@ Folder ALL IN ONE được dùng để cho thuyết trình, làm file word/pdf, 
 ## Cảm ơn
 
 Cảm ơn bạn đã ghé thăm. Nếu bạn có bất kỳ câu hỏi hoặc góp ý nào, xin vui lòng liên hệ với tôi!
+
+<table>
+  <tr>
+    <td style="vertical-align: middle;"><a href="https://www.facebook.com/lequochuy12012k4" target="_blank">
+    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook">
+  </a></td>
+    <td style="vertical-align: middle; padding-left: 10px;"><strong style="font-size: 1.5em;">Lê Quốc Huy</strong></td>
+  </tr>
+  <tr>
+    <td style="vertical-align: middle;"><a href="mailto:lequochuy12012k4@gmail.com">
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail">
+  </a></td>
+    <td style="vertical-align: middle; padding-left: 10px;"><strong style="font-size: 1.5em;">lequochuy12012k4@gmail.com</strong></td>
+  </tr>
+</table>
