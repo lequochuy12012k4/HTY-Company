@@ -95,9 +95,9 @@
     ```
 
 6.  **Build các tài sản frontend (frontend assets):**
-    (Nếu có script build trong `package.json` để biên dịch Tailwind CSS)
+    (Nếu có script build:css trong `package.json` để biên dịch Tailwind CSS)
     ```bash
-    npm run build
+    npm run build:css
     ```
 
 ### Chạy ứng dụng
