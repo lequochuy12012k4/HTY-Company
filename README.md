@@ -111,7 +111,7 @@
 ## Cấu trúc dự án
 
 *   `manage.py`: Script quản lý của Django.
-*   `db.sqlite3`: File cơ sở dữ liệu SQLite.
+*   `hty-companyDB.sqlite3`: File cơ sở dữ liệu SQLite.
 *   `requirements.txt`: Danh sách các thư viện Python.
 *   `app/`: Thư mục chứa ứng dụng Django chính.
 *   `static/`: Thư mục chứa các file tĩnh (CSS, JavaScript, hình ảnh).
