@@ -9,8 +9,21 @@
   </tr>
 </table>
 
-## Link Website: 
-<a href="https://8000-firebase-hty-company-1757746066281.cluster-w5vd22whf5gmav2vgkomwtc4go.cloudworkstations.dev" target="_blank">hty-company.com</a>
+## Link Website: <a href="https://hty-company.com" target="_blank">hty-company.com</a>
+
+<p>Do website không thể chạy 24/7 nên khi nào cần thì bạn có thể liên hệ tôi qua: </p>
+
+<p>
+  <a href="https://www.facebook.com/lequochuy12012k4" target="_blank">
+    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook"> Lê Quốc Huy
+  </a>
+  <a href="mailto:lequochuy12012k4@gmail.com">
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail"> lequochuy12012k4@gmail.com
+  </a>
+</p>
+
+<a href="https://studio.firebase.google.com/github/lequochuy12012k4/HTY-Company" target="_blank"><img src="https://firebase.google.com/images/icons/firebase_studio.png" alt="Open in Firebase Studio" width="180"></a>
+<a href="https://console.firebase.google.com/project/YOUR_FIREBASE_PROJECT_ID/hosting/sites/YOUR_FIREBASE_PROJECT_ID/deploy?authuser=0&hl=vi" target="_blank"><img src="https://www.gstatic.com/firebasejs/v8.7.1/firebase-hosting-deploy.svg" alt="Deploy to Firebase" width="180"></a>
 
 ## Giới thiệu
 
@@ -106,3 +119,7 @@
 *   `templates/`: Thư mục chứa các template HTML.
 *   `tailwind.config.js`: File cấu hình cho Tailwind CSS.
 *   `package.json`: File định nghĩa các gói và script cho frontend.
+
+## Cảm ơn
+
+Cảm ơn bạn đã ghé thăm. Nếu bạn có bất kỳ câu hỏi hoặc góp ý nào, xin vui lòng liên hệ với tôi!
