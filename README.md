@@ -39,6 +39,8 @@
 
 **Database:** ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
+**Deloy:** ![Firebase Studio](https://img.shields.io/badge/Firebase%20Studio-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+
 ## Tính năng chính
 
 *   **Quản lý tài liệu:** Tải lên, xem, và xóa các tài liệu.
