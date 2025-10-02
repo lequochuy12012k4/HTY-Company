@@ -15,10 +15,10 @@
 
 <p>
   <a href="https://www.facebook.com/lequochuy12012k4" target="_blank">
-    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook"> <strong style="font-size: 1.5em;">Lê Quốc Huy</strong>
+    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook"> <strong style="font-size: 2em;">Lê Quốc Huy</strong>
   </a>
   <a href="mailto:lequochuy12012k4@gmail.com">
-    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail"> <strong style="font-size: 1.5em;">lequochuy12012k4@gmail.com</strong>
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail"> <strong style="font-size: 2em;">lequochuy12012k4@gmail.com</strong>
   </a>
 </p>
 
