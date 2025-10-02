@@ -9,8 +9,7 @@
   </tr>
 </table>
 
-## Link Website
-<p>Nhấn link này để trải nghiệm website <a href="https://8000-firebase-hty-company-1757746066281.cluster-w5vd22whf5gmav2vgkomwtc4go.cloudworkstations.dev/">hty-company.com</a></p>
+## Link Website: <a href="https://8000-firebase-hty-company-1757746066281.cluster-w5vd22whf5gmav2vgkomwtc4go.cloudworkstations.dev/">hty-company.com</a>
 
 ## Giới thiệu
 
