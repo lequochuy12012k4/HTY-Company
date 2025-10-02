@@ -22,8 +22,8 @@
   </a>
 </p>
 
-<a href="https://studio.firebase.google.com/github/lequochuy12012k4/HTY-Company" target="_blank"><img src="https://firebase.google.com/images/icons/firebase_studio.png" alt="Open in Firebase Studio" width="180"></a>
-<a href="https://console.firebase.google.com/project/YOUR_FIREBASE_PROJECT_ID/hosting/sites/YOUR_FIREBASE_PROJECT_ID/deploy?authuser=0&hl=vi" target="_blank"><img src="https://www.gstatic.com/firebasejs/v8.7.1/firebase-hosting-deploy.svg" alt="Deploy to Firebase" width="180"></a>
+<!-- <a href="https://studio.firebase.google.com/github/lequochuy12012k4/HTY-Company" target="_blank"><img src="https://firebase.google.com/images/icons/firebase_studio.png" alt="Open in Firebase Studio" width="180"></a>
+<a href="https://console.firebase.google.com/project/YOUR_FIREBASE_PROJECT_ID/hosting/sites/YOUR_FIREBASE_PROJECT_ID/deploy?authuser=0&hl=vi" target="_blank"><img src="https://www.gstatic.com/firebasejs/v8.7.1/firebase-hosting-deploy.svg" alt="Deploy to Firebase" width="180"></a> -->
 
 ## Giới thiệu
 
