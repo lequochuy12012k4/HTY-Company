@@ -1,15 +1,17 @@
 {% load static %}
 <div class="container mx-auto mt-8 p-4">
+    {% if user.is_authenticated %}
     <div class="md:hidden mb-4 relative">
         <div class="relative flex items-center">
-            <input type="text" id="mobile-search-input-home" placeholder="Tìm kiếm..." class="w-full p-2 pl-10 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[rgba(234,238,245,1)] dark:bg-gray-800 dark:text-white">
+            <input type="text" id="mobile-search-input-home" placeholder="Tìm kiếm..." class="w-full p-2 pl-10 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[rgba(234,238,245,1)] text-black dark:bg-gray-800 dark:text-white">
             <div class="absolute left-3">
                 <i class="fas fa-search text-gray-400"></i>
             </div>
         </div>
-        <div id="mobile-search-results-home" class="absolute top-full left-0 w-full bg-white dark:bg-gray-800 border dark:border-gray-700 border-gray-300 rounded-md mt-1 z-10 hidden shadow-lg">
+        <div id="mobile-search-results-home" class="absolute top-full text-black left-0 w-full bg-white dark:bg-gray-900 border dark:border-gray-700 border-gray-300 rounded-md mt-1 z-10 hidden shadow-lg">
         </div>
     </div>
+    {% endif %}
     <h1 class="text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-6">Tài liệu Công Ty</h1>
 
     <div id="document-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -134,14 +136,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             data.forEach(doc => {
                                 const resultItem = document.createElement('a');
                                 resultItem.href = `/document/${doc.id}/`;
-                                resultItem.className = 'block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 border-b dark:border-gray-500';
+                                resultItem.className = 'block p-2 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border-b dark:border-gray-600';
                                 resultItem.textContent = doc.title;
                                 resultsContainer.appendChild(resultItem);
                             });
                             resultsContainer.classList.remove('hidden');
                         } else {
                             const noResultItem = document.createElement('div');
-                            noResultItem.className = 'p-2 text-gray-500 dark:text-gray-400';
+                            noResultItem.className = 'p-2 text-gray-500 dark:text-gray-300';
                             noResultItem.textContent = 'Không tìm thấy tài liệu';
                             resultsContainer.appendChild(noResultItem);
                             resultsContainer.classList.remove('hidden');

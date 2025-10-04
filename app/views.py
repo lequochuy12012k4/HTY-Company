@@ -182,9 +182,12 @@ def UploadPage(request):
             return JsonResponse({'status': 'error', 'message': 'Tài liệu không hợp lệ. Vui lòng kiểm tra lại.'})
             
     else:
-        documents = Document.objects.filter(user=request.user)
+        documents_list = Document.objects.filter(user=request.user)
+        paginator = Paginator(documents_list, 8)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         context = {
-            'documents': documents
+            'documents': page_obj
         }
         return render(request, 'Navbar/UploadPage.html', context)
 
@@ -202,11 +205,66 @@ def ToggleFavorite(request, document_id):
 
 @login_required(login_url='login')
 def FavoritePage(request):
-    favorite_documents = request.user.favorite_documents.select_related('user').all()
+    favorite_documents_list = request.user.favorite_documents.select_related('user').all()
+    paginator = Paginator(favorite_documents_list, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
-        'documents': favorite_documents
+        'documents': page_obj
     }
     return render(request, 'Navbar/FavoritePage.html', context)
+
+@login_required(login_url='login')
+def EditDocumentsPage(request):
+    documents_list = Document.objects.filter(user=request.user)
+    paginator = Paginator(documents_list, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'documents': page_obj
+    }
+    return render(request, 'Navbar/EditDocumentsPage.html', context)
+
+@login_required(login_url='login')
+def edit_document(request, document_id):
+    document = get_object_or_404(Document, id=document_id, user=request.user)
+    if request.method == 'POST':
+        document.title = request.POST.get('title')
+        author_name = request.POST.get('author')
+        document.description = request.POST.get('description')
+        
+        author, _ = Author.objects.get_or_create(name=author_name)
+        document.author = author
+
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+            if image.size > 3 * 1024 * 1024:
+                messages.error(request, 'Kích thước ảnh không được vượt quá 3MB.')
+                return redirect('edit_document', document_id=document.id)
+            document.image = image
+
+        if 'document' in request.FILES:
+            document_file = request.FILES['document']
+            if document_file.size > 5 * 1024 * 1024:
+                messages.error(request, 'Kích thước tệp không được vượt quá 5MB.')
+                return redirect('edit_document', document_id=document.id)
+            document.document = document_file
+            
+        document.save()
+        messages.success(request, 'Tài liệu đã được cập nhật thành công.')
+        return redirect('edit_documents')
+    else:
+        context = {
+            'document': document
+        }
+        return render(request, 'Navbar/EditDocumentPage.html', context)
+
+@login_required(login_url='login')
+def delete_document(request, document_id):
+    document = get_object_or_404(Document, id=document_id, user=request.user)
+    document.delete()
+    messages.success(request, 'Tài liệu đã được xóa thành công.')
+    return redirect('edit_documents')
 
 def Search(request):
     if not request.user.is_authenticated:
@@ -233,3 +291,6 @@ def Search(request):
         })
     
     return JsonResponse(data, safe=False)
+
+def SecretPage(request):
+  return render(request, 'secret/15102518.html')

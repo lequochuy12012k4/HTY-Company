@@ -1,0 +1,102 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<title>{{ document.title }}</title>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8 dark:text-white">Chỉnh sửa tài liệu "{{document.title}}"</h1>
+        <div class="max-w-lg mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <form id="edit-form" action="{% url 'edit_document' document.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="title" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Tiêu đề</label>
+                    <input type="text" name="title" value="{{ document.title }}" class="w-full px-3 py-2 border rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="author" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Tác giả</label>
+                    <input type="text" name="author" value="{{ document.author.name }}" class="w-full px-3 py-2 border rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Miêu tả</label>
+                    <textarea name="description" class="w-full px-3 py-2 border rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:border-blue-500">{{ document.description }}</textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="image" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Ảnh (PNG, JPG < 3MB)</label>
+                    <input type="file" name="image" accept=".png, .jpg" class="w-full px-3 py-2 border rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:border-blue-500" placeholder="{{ document.image.url }}">
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 italic">File hiện tại: {{ document.image.url }}</p>
+                </div>
+                <div class="mb-4">
+                    <label for="document" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Tệp tải lên (PDF < 5MB)</label>
+                    <input type="file" name="document" accept=".pdf" class="w-full px-3 py-2 border rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:border-blue-500" placeholder="{{ document.document.url }}">
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 italic">File hiện tại: {{ document.document.url }}</p>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-blue-600 dark:hover:bg-blue-800">Lưu</button>
+                    <a href="{% url 'edit_documents' %}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="notification" class="fixed top-16 right-4 p-4 rounded-lg shadow-lg z-50 hidden flex items-center justify-between" style="background-color: #fde8e8;">
+        <span id="notification-message" class="text-sm font-medium text-red-700"></span>
+        <span id="notification-close" class="ml-4 cursor-pointer">
+            <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+    </div>
+
+    <div id="success-notification" class="fixed top-16 right-4 p-4 rounded-lg shadow-lg z-50 hidden flex items-center justify-between" style="background-color: #e8f5e9;">
+        <span id="success-notification-message" class="text-sm font-medium text-green-700">Chỉnh sửa tài liệu thành công.</span>
+        <span id="success-notification-close" class="ml-4 cursor-pointer">
+            <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editForm = document.getElementById('edit-form');
+    const imageInput = document.querySelector('input[name="image"]');
+    const documentInput = document.querySelector('input[name="document"]');
+    const notification = document.getElementById('notification');
+    const notificationMessage = document.getElementById('notification-message');
+    const notificationClose = document.getElementById('notification-close');
+    const successNotification = document.getElementById('success-notification');
+    const successNotificationClose = document.getElementById('success-notification-close');
+
+    function showNotification(message) {
+        notificationMessage.textContent = message;
+        notification.classList.remove('hidden');
+    }
+
+    function showSuccessNotification() {
+        successNotification.classList.remove('hidden');
+    }
+
+    notificationClose.addEventListener('click', function() {
+        notification.classList.add('hidden');
+    });
+
+    successNotificationClose.addEventListener('click', function() {
+        successNotification.classList.add('hidden');
+    });
+
+    editForm.addEventListener('submit', function(event) {
+        const imageFile = imageInput.files[0];
+        const documentFile = documentInput.files[0];
+
+        if (imageFile && imageFile.size > 3 * 1024 * 1024) {
+            event.preventDefault();
+            showNotification('Kích thước ảnh không được vượt quá 3MB.');
+        }
+
+        if (documentFile && documentFile.size > 5 * 1024 * 1024) {
+            event.preventDefault();
+            showNotification('Kích thước tệp không được vượt quá 5MB.');
+        }
+
+        if (!event.defaultPrevented) {
+            showSuccessNotification();
+        }
+    });
+});
+</script>
+{% endblock %}

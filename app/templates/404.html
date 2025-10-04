@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../static/images/icontab.png">
+    <title>404 Not Found</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Arvo'>
+    <style>
+        /* Base styles for both themes */
+        body {
+            font-family: 'Arvo', serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .page_404 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s;
+        }
+
+        .main-404-title {
+            font-size: 8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .gif-container {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 800px;
+            box-sizing: border-box;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .four_zero_four_bg {
+            background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+            height: 500px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+
+        .contant_box_404 {
+            text-align: center;
+        }
+
+        .contant_box_404 p {
+            font-size: 2.5rem;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            transition: color 0.3s;
+        }
+
+        /* Light Theme (default) */
+        body {
+            background-color: #fff;
+        }
+        .page_404 {
+            background-color: #fff;
+        }
+        .main-404-title {
+            color: #343a40;
+        }
+        .gif-container {
+            background-color: #ffffff;
+            border: none;
+        }
+        .contant_box_404 p {
+            color: #6c757d;
+        }
+
+        /* Dark Theme */
+        html.dark body {
+            background-color: #121212;
+        }
+        html.dark .page_404 {
+            background-color: #1a1a1a;
+        }
+        html.dark .main-404-title {
+            color: #fff;
+        }
+        html.dark .gif-container {
+            background-color: #fff; /* White box for the GIF as in the screenshot */
+            border: none;
+        }
+        html.dark .contant_box_404 p {
+            color: #adb5bd;
+        }
+
+        .btn-success {
+            color: #fff !important;
+            padding: 10px 20px;
+            background: #39ac31;
+            margin: 0;
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 5px;
+            border: 2px solid #39ac31;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: transparent;
+            color: #39ac31 !important;
+        }
+
+        @media (max-width: 767px) {
+            .main-404-title {
+                font-size: 5rem;
+            }
+            .four_zero_four_bg {
+                height: 350px;
+            }
+            .contant_box_404 p {
+                font-size: 1.5rem;
+            }
+            .gif-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="page_404">
+        <h1 class="main-404-title text-center">404</h1>
+        <div class="gif-container">
+            <div class="four_zero_four_bg"></div>
+        </div>
+        <div class="contant_box_404">
+            <p>Trang bạn đang tìm kiếm không tồn tại</p>
+            <a href="{% url 'home' %}" class="btn btn-success">Trờ về Trang chính</a>
+        </div>
+    </section>
+
+    <script>
+        (function() {
+            const matcher = window.matchMedia('(prefers-color-scheme: dark)');
+            function applyTheme(isDark) {
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+            applyTheme(matcher.matches);
+            matcher.addEventListener('change', (e) => applyTheme(e.matches));
+        })();
+    </script>
+</body>
+</html>

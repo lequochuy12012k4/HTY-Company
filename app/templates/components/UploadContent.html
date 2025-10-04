@@ -16,7 +16,7 @@
         </div>
         <div class="mb-4">
             <label for="image" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Ảnh (PNG, JPG < 3MB)</label>
-            <input type="file" id="image" accept=".png, .jpg, .webp" name="image" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600" required>
+            <input type="file" id="image" accept=".png, .jpg" name="image" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600" required>
         </div>
         <div class="mb-4">
             <label for="file" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Tệp tải lên (PDF < 5MB)</label>
@@ -62,6 +62,7 @@
                 </div>
             {% endif %}
     </div>
+    {% include 'components/Pagination.html' %}
 </div>
 
 <script>
@@ -79,12 +80,12 @@
         const pdfFile = fileInput.files[0];
 
         if (imageFile && imageFile.size > 3 * 1024 * 1024) {
-            showToast('Kích thước ảnh không được vượt quá 3MB.', 'error');
+            showToast('Kích thước ảnh không vượt quá 3MB.', 'error');
             return;
         }
 
         if (pdfFile && pdfFile.size > 5 * 1024 * 1024) {
-            showToast('Kích thước tệp không được vượt quá 5MB.', 'error');
+            showToast('Kích thước tệp không vượt quá 5MB.', 'error');
             return;
         }
 
@@ -103,6 +104,10 @@
             if (data.status === 'success') {
                 showToast(data.message, 'success');
                 form.reset();
+                 // Tải lại trang sau khi tải lên thành công
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000); // Đợi 1 giây trước khi tải lại
             } else {
                 showToast(data.message, 'error');
             }

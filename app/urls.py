@@ -14,5 +14,9 @@ urlpatterns = [
     path('upload/', UploadPage, name='upload'),
     path('favorite/<int:document_id>/', ToggleFavorite, name='toggle-favorite'),
     path('favorites/', FavoritePage, name='favorites'),
+    path('edit_documents/', EditDocumentsPage, name='edit_documents'),
+    path('edit_document/<int:document_id>/', edit_document, name='edit_document'),
+    path('delete_document/<int:document_id>/', delete_document, name='delete_document'),
     path('search/', Search, name='search'),
+    path('81520151/',SecretPage, name='secret_page')
 ]
