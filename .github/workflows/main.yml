@@ -1,4 +1,3 @@
-
 name: Build, Test and Security
 
 on:
@@ -42,6 +41,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: security
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
