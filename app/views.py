@@ -53,12 +53,12 @@ def LoginPage(request):
         return redirect('secret_page')
     user = authenticate(request, username=username, password=password)
     if user is not None:
-      if user.is_superuser:
-          login(request, user)
-          return redirect('/admin')
-      login(request, user)
-      messages.success(request, f'Chào mừng, {user.username}!')
-      return redirect('/')
+        if user.is_superuser:
+            login(request, user)
+            return redirect('/admin')
+        login(request, user)
+        messages.success(request, f'Chào mừng, {user.username}!')
+        return redirect('/')
     else:
       messages.error(request, 'Tên người dùng hoặc mật khẩu không đúng.')
       return redirect('login')
