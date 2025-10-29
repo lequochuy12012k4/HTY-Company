@@ -1,0 +1,7 @@
+asgiref
+Django
+fpdf
+pillow
+python-dotenv
+sqlparse
+whitenoise

@@ -1,0 +1,31 @@
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('', HomePage, name='home'),
+    path('document/<int:document_id>/', DocumentDetailPage, name='document-detail'),
+    path('author/<int:author_id>/', AuthorDetailPage, name='author-detail'),
+    path('login/', LoginPage, name='login'),
+    path('register/', RegisterPage, name='register'),
+    path('get-teams/', get_teams, name='get-teams'),
+    path('logout/', LogoutUser, name='logout'),
+    path('forgot-password/', ForgotPasswordPage, name='forgot-password'),
+    path('reset-password/<uidb64>/<token>/', ResetPasswordPage, name='reset-password'),
+    path('profile/', ProfilePage, name='profile'),
+    path('upload/', UploadPage, name='upload'),
+    path('favorite/<int:document_id>/', ToggleFavorite, name='toggle-favorite'),
+    path('favorites/', FavoritePage, name='favorites'),
+    path('edit_documents/', EditDocumentsPage, name='edit_documents'),
+    path('edit_document/<int:document_id>/', edit_document, name='edit_document'),
+    path('delete_document/<int:document_id>/', delete_document, name='delete_document'),
+    path('search/', Search, name='search'),
+    path('management/', ManagementPage, name='management'),
+    path('manage_employee/<int:employee_id>/', manage_employee, name='manage_employee'),
+    path('manage_document/<int:document_id>/', manage_document, name='manage_document'),
+    path('delete_employee/<int:employee_id>/', delete_employee, name='delete_employee'),
+    path('delete_managed_document/<int:document_id>/', delete_managed_document, name='delete_managed_document'),
+    path('approval/', ApprovalPage, name='approval_page'),
+    path('approve/<int:user_id>/', approve_user, name='approve_user'),
+    path('reject/<int:user_id>/', reject_user, name='reject_user'),
+    path('81520151/',SecretPage, name='secret_page')
+]

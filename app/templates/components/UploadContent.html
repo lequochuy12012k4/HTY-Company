@@ -1,0 +1,124 @@
+<div class="container mx-auto mt-8 p-4">
+    <h1 class="text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-6">Tải tài liệu lên</h1>
+    <form id="upload-form" action="{% url 'upload' %}" method="POST" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="title" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Tiêu đề</label>
+            <input type="text" id="title" name="title" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600" required>
+        </div>
+        <div class="mb-4">
+            <label for="author" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Tác giả</label>
+            <input type="text" id="author" name="author" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600" required>
+        </div>
+        <div class="mb-4">
+            <label for="description" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Miêu tả</label>
+            <textarea id="description" name="description" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600" required></textarea>
+        </div>
+        <div class="mb-4">
+            <label for="image" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Ảnh (PNG, JPG < 3MB)</label>
+            <input type="file" id="image" accept=".png, .jpg" name="image" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600" required>
+        </div>
+        <div class="mb-4">
+            <label for="file" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Tệp tải lên (PDF < 5MB)</label>
+            <input type="file" id="file" name="file" accept=".pdf" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600" required>
+        </div>
+        <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Tải lên</button>
+    </form>
+</div>
+
+<div class="container mx-auto mt-8 p-4">
+    <h1 class="text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-6">Tài liệu đã tải lên: </h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {% if documents %}
+                {% for document in documents %}
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                        <a href="{% url 'document-detail' document.id %}">
+                            <img src="{{ document.image.url }}" alt="Document Image" class="w-full h-48 object-cover">
+                        </a>
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-300 mb-2">{{ document.title }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ document.description }}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                Tác giả: <a href="{% url 'author-detail' document.author.id %}" class="text-blue-500 hover:underline">{{ document.author.name }}</a>
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><i>Được thêm bởi: {{ document.user.username }}</i></p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><i>Được tải lên lúc: {{ document.created_at }}</i></p>
+                            <div class="flex justify-between items-center">
+                                <div class="space-x-2">
+                                    <a href="{% url 'document-detail' document.id %}" class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-md text-sm transition duration-300">Xem chi tiết</a>
+                                    <a href="{{ document.document.url }}" download class="text-gray-700 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 px-3 py-1 rounded-md text-sm transition duration-300">Tải xuống</a>
+                                </div>
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'toggle-favorite' document.id %}" class="text-gray-400 hover:text-red-500 transition duration-300">
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-span-full text-center">
+                    <p class="text-gray-600 dark:text-gray-400 text-lg">Bạn chưa tải lên tài liệu nào.</p>
+                </div>
+            {% endif %}
+    </div>
+    {% include 'components/Pagination.html' %}
+</div>
+
+<script>
+    document.getElementById('upload-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const submitButton = form.querySelector('button[type="submit"]');
+        
+        const imageInput = document.getElementById('image');
+        const fileInput = document.getElementById('file');
+        
+        const imageFile = imageInput.files[0];
+        const pdfFile = fileInput.files[0];
+
+        if (imageFile && imageFile.size > 3 * 1024 * 1024) {
+            showToast('Kích thước ảnh không vượt quá 3MB.', 'error');
+            return;
+        }
+
+        if (pdfFile && pdfFile.size > 5 * 1024 * 1024) {
+            showToast('Kích thước tệp không vượt quá 5MB.', 'error');
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Đang tải lên...';
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showToast(data.message, 'success');
+                form.reset();
+                 // Tải lại trang sau khi tải lên thành công
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000); // Đợi 1 giây trước khi tải lại
+            } else {
+                showToast(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showToast('Đã có lỗi xảy ra khi tải lên. Vui lòng thử lại.', 'error');
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Tải lên';
+        });
+    });
+</script>

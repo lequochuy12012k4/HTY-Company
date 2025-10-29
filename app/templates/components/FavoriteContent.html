@@ -1,0 +1,36 @@
+{% load static %}
+<div class="container mx-auto mt-8 p-4">
+    <h1 class="text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-6">Tài liệu Yêu thích</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {% for document in documents %}
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="{{ document.image.url }}" alt="Document Image" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-300 mb-2">{{ document.title }}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Tác giả: {{ document.author }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ document.description }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Được thêm bởi: {{ document.user.username }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><i>Được tải lên lúc: {{ document.created_at }}</i></p>
+                <div class="flex justify-between items-center">
+                    <div class="space-x-2">
+                        <a href="{% url 'document-detail' document.id %}" class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-md text-sm transition duration-300">Xem chi tiết</a>
+                        <a href="{{ document.document.url }}" download class="text-gray-700 bg-gray-200 hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-1 rounded-md text-sm transition duration-300">Tải xuống</a>
+                    </div>
+                    <form action="{% url 'toggle-favorite' document.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="text-gray-400 hover:text-red-500 transition duration-300">
+                            <i class="fas fa-heart text-red-500 text-xl"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center text-gray-500 dark:text-gray-400">
+            <p>Bạn chưa có tài liệu yêu thích nào.</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% include 'components/Pagination.html' %}
+</div>

@@ -1,0 +1,43 @@
+<div class="container mx-auto mt-8 p-4">
+    <h1 class="text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-6">Hồ sơ tài khoản</h1>
+
+    <div class="w-full max-w-md">
+        <div class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-300">Cập nhật hồ sơ</h2>
+            <form method='POST' action="{% url 'profile' %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="username">
+                        Tên người dùng
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Tên người dùng mới" name="username" value="{{ user.username }}"disabled>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="old-password">
+                        Mật khẩu cũ
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="old-password" type="password" placeholder="******************" name="old_password">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="password">
+                        Mật khẩu mới
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" name="password">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="confirm-password">
+                        Xác nhận mật khẩu mới
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="confirm-password" type="password" placeholder="******************" name="confirm_password">
+                </div>
+                <div class="flex items-center justify-start">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Cập nhật
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

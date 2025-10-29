@@ -1,0 +1,25 @@
+{% extends 'Base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-10">
+    <h1 class="text-3xl font-bold mb-5 dark:text-gray-300">Pending Approvals</h1>
+    {% if pending_users %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for profile in pending_users %}
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold mb-2 dark:text-gray-300">{{ profile.user.username }}</h2>
+                    <p class="text-gray-700 dark:text-gray-400"><strong>Full Name:</strong> {{ profile.full_name }}</p>
+                    <p class="text-gray-700 dark:text-gray-400"><strong>Department:</strong> {{ profile.department.name }}</p>
+                    <p class="text-gray-700 dark:text-gray-400"><strong>Team:</strong> {{ profile.team.name }}</p>
+                    <div class="mt-4">
+                        <a href="{% url 'approve_user' profile.user.id %}" class="bg-green-500 text-white p-2 rounded-lg">Approve</a>
+                        <a href="{% url 'reject_user' profile.user.id %}" class="bg-red-500 text-white p-2 rounded-lg">Reject</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-700 dark:text-gray-400">No pending approvals.</p>
+    {% endif %}
+</div>
+{% endblock %}

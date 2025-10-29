@@ -1,0 +1,23 @@
+Rằng buộc toàn vẹn
+
+1. Toàn vẹn thực thể (Entity Integrity):
+
+Mỗi bảng (Author, Document) đều có một trường id làm khóa chính (primary key). Ràng buộc này đảm bảo mỗi hàng trong bảng là duy nhất và không thể có giá trị NULL.
+
+2. Toàn vẹn miền (Domain Integrity):
+
+Chúng ta đã định nghĩa các kiểu dữ liệu cho mỗi trường (ví dụ CharField, DateTimeField, BooleanField). Cơ sở dữ liệu sẽ không cho phép chèn một kiểu dữ liệu khác vào các cột này.
+Ràng buộc unique=True trên trường name của Author đảm bảo không thể có hai tác giả trùng tên.
+
+3. Toàn vẹn tham chiếu (Referential Integrity):
+
+Đây là ràng buộc quan trọng nhất mà chúng ta đã xử lý. Nó được tạo ra bởi khóa ngoại (Foreign Key).
+Document.author: Ràng buộc này yêu cầu giá trị trong cột author_id của bảng Document phải tương ứng với một giá trị id có thật trong bảng Author.
+Hành vi khi xóa (on_delete):
+on_delete=models.SET_NULL (ở trường author): Nếu một tác giả bị xóa, trường author của tất cả các tài liệu liên quan sẽ được đặt thành NULL. Điều này giúp giữ lại tài liệu ngay cả khi tác giả không còn tồn-tại.
+on_delete=models.CASCADE (ở trường user): Nếu một người dùng (User) bị xóa, tất cả các tài liệu (Document) do người đó tạo cũng sẽ bị xóa theo.
+
+4. Toàn vẹn do người dùng định nghĩa:
+
+Trường favorited_by tạo ra một mối quan hệ nhiều-nhiều (Many-to-Many). Django sẽ tự động tạo một bảng trung gian để quản lý mối quan hệ này. Bảng này cũng có các ràng buộc toàn vẹn tham chiếu riêng để đảm bảo chỉ các user và document hợp lệ mới có thể được kết nối với nhau.
+Tất cả các ràng buộc này phối hợp với nhau để bảo vệ cấu trúc và sự logic của dữ liệu.

@@ -1,0 +1,100 @@
+<div class="w-full max-w-md">
+    <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 dark:text-gray-300 mb-6 sm:mb-8">
+        <a href="{% url 'home' %}">HTY Company</a>
+    </h1>
+
+    <div class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-300">Đăng ký</h2>
+        <form method='POST' onsubmit="return validatePassword()">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="username">
+                    Tên người dùng
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Tên người dùng" name="username" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="full_name">
+                    Họ và tên
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" id="full_name" type="text" placeholder="Họ và tên" name="full_name" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="email">
+                    Email
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email" name="email" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="department">
+                    Phòng
+                </label>
+                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" id="department" name="department" required>
+                    <option value="">Chọn phòng</option>
+                    {% for department in departments %}
+                        <option value="{{ department.id }}">{{ department.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="team">
+                    Ban
+                </label>
+                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" id="team" name="team" required>
+                    <option value="">Chọn ban</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="password">
+                    Mật khẩu
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" name="password" required>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 dark:text-gray-400 text-sm font-bold mb-2" for="confirm-password">
+                    Xác nhận mật khẩu
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="confirm-password" type="password" placeholder="******************" required>
+            </div>
+            <div class="flex items-center justify-start">
+                <button class="bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Đăng ký
+                </button>
+            </div>
+            <div class="text-center mt-6">
+                <p class="text-gray-600 dark:text-gray-400">Đã có tài khoản? <a href="{% url 'login' %}" class="font-bold text-blue-500 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Đăng nhập</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('department').addEventListener('change', function() {
+        var departmentId = this.value;
+        var teamSelect = document.getElementById('team');
+        teamSelect.innerHTML = '<option value="">Chọn ban</option>';
+
+        if (departmentId) {
+            fetch('/get-teams?department_id=' + departmentId)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(team => {
+                        var option = document.createElement('option');
+                        option.value = team.id;
+                        option.textContent = team.name;
+                        teamSelect.appendChild(option);
+                    });
+                });
+        }
+    });
+
+    function validatePassword() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm-password").value;
+        if (password != confirmPassword) {
+            showToast("Mật khẩu không trùng khớp", "error");
+            return false;
+        }
+        return true;
+    }
+</script>

@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+      {
+        "name": "Django DB",
+        "driver": "SQLite",
+        "database": "/home/user/hty-company/HTY-Company/hty-companyDB.sqlite3"
+      }
+    ],
+    "sqltools.useNodeRuntime": true
+  }

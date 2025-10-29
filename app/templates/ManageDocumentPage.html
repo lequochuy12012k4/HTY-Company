@@ -1,0 +1,31 @@
+{% extends 'Base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-10">
+    <h1 class="text-3xl font-bold mb-5 dark:text-gray-300">Manage Document: {{ document.title }}</h1>
+    <form method="post" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="title" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Title</label>
+            <input type="text" name="title" id="title" value="{{ document.title }}" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
+        </div>
+        <div class="mb-4">
+            <label for="author" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Author</label>
+            <input type="text" name="author" id="author" value="{{ document.author.name }}" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
+        </div>
+        <div class="mb-4">
+            <label for="description" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Description</label>
+            <textarea name="description" id="description" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">{{ document.description }}</textarea>
+        </div>
+        <div class="mb-4">
+            <label for="image" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Image</label>
+            <input type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
+        </div>
+        <div class="mb-4">
+            <label for="file" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Document</label>
+            <input type="file" name="document" id="file" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
+        </div>
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded-lg">Save</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block content %}
+<title>Trang tác giả {{ author.name }}</title>
+
+<div class="container mx-auto mt-8 p-4">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200">{{ author.name }}</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Các tài liệu được viết bởi tác giả này</p>
+    </div>
+
+    <div id="document-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {% if documents %}
+            {% for document in documents %}
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <a href="{% url 'document-detail' document.id %}">
+                        <img src="{{ document.image.url }}" alt="Document Image" class="w-full h-48 object-cover">
+                    </a>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">{{ document.title }}</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ document.description }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                            Tác giả: <a href="{% url 'author-detail' document.author.id %}" class="text-blue-500 hover:underline">{{ document.author.name }}</a>
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><i>Được thêm bởi: {{ document.user.username }}</i></p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><i>Được tải lên lúc: {{ document.created_at }}</i></p>
+                        <div class="flex justify-between items-center">
+                            <div class="space-x-2">
+                                <a href="{% url 'document-detail' document.id %}" class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-md text-sm transition duration-300">Xem chi tiết</a>
+                                <a href="{{ document.document.url }}" download class="text-gray-700 bg-gray-200 hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-1 rounded-md text-sm transition duration-300">Tải xuống</a>
+                            </div>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'toggle-favorite' document.id %}" class="text-gray-400 hover:text-red-500 transition duration-300">
+                                {% if request.user in document.favorited_by.all %}
+                                    <i class="fas fa-heart text-red-500 text-xl"></i>
+                                {% else %}
+                                    <i class="far fa-heart text-xl"></i>
+                                {% endif %}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-span-full text-center">
+                <p class="text-gray-600 dark:text-gray-400 text-lg">Tác giả này chưa có tài liệu nào.</p>
+            </div>
+        {% endif %}
+    </div>
+    {% include 'components/Pagination.html' %}
+</div>
+
+{% endblock %}
