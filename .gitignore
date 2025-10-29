@@ -5,4 +5,4 @@ __pycache__
 node_modules
 .vercel
 data
-.sqlite3
+hty-companyDB.sqlite3
