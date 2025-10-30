@@ -1,0 +1,75 @@
+{% extends 'Base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Chỉnh sửa người dùng</h1>
+
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+        <form method="post" action="{% url 'edit_user' user.id %}">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="full_name" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Họ và tên</label>
+                <input type="text" name="full_name" id="full_name" value="{{ user.profile.full_name }}" class="w-full px-3 py-2 border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-black dark:text-white" required>
+            </div>
+            <div class="mb-4">
+                <label for="department" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Phòng ban</label>
+                <select name="department" id="department" class="w-full px-3 py-2 border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-black dark:text-white">
+                    <option value="">---------</option>
+                    {% for department in departments %}
+                        <option value="{{ department.id }}" {% if user.profile.department.id == department.id %}selected{% endif %}>{{ department.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="team" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Ban</label>
+                <select name="team" id="team" class="w-full px-3 py-2 border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-black dark:text-white">
+                    <option value="">---------</option>
+                    {% for team in teams %}
+                        <option value="{{ team.id }}" {% if user.profile.team.id == team.id %}selected{% endif %}>{{ team.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">Lưu</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const departmentSelect = document.getElementById('department');
+    const teamSelect = document.getElementById('team');
+    const initialTeamId = "{{ user.profile.team.id|default_if_none:'' }}";
+
+    function fetchTeams(departmentId) {
+        if (!departmentId) {
+            teamSelect.innerHTML = '<option value="">---------</option>';
+            return;
+        }
+
+        fetch(`/get-teams/?department_id=${departmentId}`)
+            .then(response => response.json())
+            .then(data => {
+                teamSelect.innerHTML = '<option value="">---------</option>';
+                data.forEach(team => {
+                    const option = document.createElement('option');
+                    option.value = team.id;
+                    option.textContent = team.name;
+                    if (team.id == initialTeamId) {
+                        option.selected = true;
+                    }
+                    teamSelect.appendChild(option);
+                });
+            });
+    }
+
+    departmentSelect.addEventListener('change', function() {
+        fetchTeams(this.value);
+    });
+
+    // Initial load
+    if (departmentSelect.value) {
+        fetchTeams(departmentSelect.value);
+    }
+});
+</script>
+{% endblock %}

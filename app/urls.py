@@ -27,5 +27,14 @@ urlpatterns = [
     path('approval/', ApprovalPage, name='approval_page'),
     path('approve/<int:user_id>/', approve_user, name='approve_user'),
     path('reject/<int:user_id>/', reject_user, name='reject_user'),
-    path('81520151/',SecretPage, name='secret_page')
+    path('81520151/',SecretPage, name='secret_page'),
+    path('manage_departments/', manage_departments, name='manage_departments'),
+    path('edit_department/<int:department_id>/', edit_department, name='edit_department'),
+    path('delete_department/<int:department_id>/', delete_department, name='delete_department'),
+    path('manage_teams/', manage_teams, name='manage_teams'),
+    path('edit_team/<int:team_id>/', edit_team, name='edit_team'),
+    path('delete_team/<int:team_id>/', delete_team, name='delete_team'),
+    path('manage_users/', manage_users, name='manage_users'),
+    path('edit_user/<int:user_id>/', edit_user, name='edit_user'),
+    path('delete_user/<int:user_id>/', delete_user, name='delete_user'),
 ]

@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import *
 from django.http import JsonResponse
@@ -11,6 +11,12 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.urls import reverse
 from django.utils.html import format_html
+
+def is_admin(user):
+    return user.is_superuser
+
+def is_manager(user):
+    return hasattr(user, 'profile') and user.profile.is_manager
 
 def HomePage(request):
   if not request.user.is_authenticated:
@@ -21,7 +27,9 @@ def HomePage(request):
   except Profile.DoesNotExist:
       profile = None
 
-  if profile and profile.department:
+  if request.user.is_superuser:
+    documents_list = Document.objects.all()
+  elif profile and profile.department:
       documents_list = Document.objects.select_related('user', 'author', 'department').filter(department=profile.department)
   else:
       documents_list = Document.objects.none()
@@ -29,9 +37,16 @@ def HomePage(request):
   paginator = Paginator(documents_list, 12)
   page_number = request.GET.get('page')
   page_obj = paginator.get_page(page_number)
+  
   context = {
     'documents': page_obj
   }
+
+  if request.user.is_superuser:
+    context['document_count'] = Document.objects.count()
+    context['user_count'] = User.objects.filter(is_superuser=False).count()
+    context['manager_count'] = Profile.objects.filter(is_manager=True).count()
+
   return render(request, 'HomePage.html', context)
 
 def DocumentDetailPage(request, document_id):
@@ -89,7 +104,7 @@ def LoginPage(request):
         login(request, user)
         
         if user.is_superuser:
-            return redirect('/admin')
+            return redirect('manage_departments')
         
         if hasattr(user, 'profile') and user.profile.is_manager:
             messages.success(request, f'Chào mừng quản lý, {user.username}!')
@@ -504,6 +519,7 @@ def reject_user(request, user_id):
 
     user_to_reject.profile.status = 'rejected'
     user_to_reject.profile.save()
+    user_to_reject.delete()
 
     messages.success(request, f"User {user_to_reject.username} has been rejected.")
     return redirect(request.META.get('HTTP_REFERER', '/'))
@@ -536,3 +552,159 @@ def Search(request):
 
 def SecretPage(request):
   return render(request, 'secret/15102518.html')
+
+@user_passes_test(is_admin)
+def manage_departments(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        manager_id = request.POST.get('manager')
+        if name:
+            manager = None
+            if manager_id:
+                manager = User.objects.get(id=manager_id)
+            Department.objects.create(name=name, manager=manager)
+            messages.success(request, 'Thêm phòng ban thành công.')
+        return redirect('manage_departments')
+    
+    departments = Department.objects.all()
+    users = User.objects.filter(is_superuser=False, profile__status='approved')
+    
+    document_count = Document.objects.count()
+    user_count = User.objects.filter(is_superuser=False).count()
+    manager_count = User.objects.filter(profile__is_manager=True).count()
+
+    context = {
+        'departments': departments,
+        'users': users,
+        'document_count': document_count,
+        'user_count': user_count,
+        'manager_count': manager_count,
+    }
+    return render(request, 'ManageDepartmentsPage.html', context)
+
+@user_passes_test(is_admin)
+def edit_department(request, department_id):
+    department = get_object_or_404(Department, id=department_id)
+    old_manager = department.manager
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        manager_id = request.POST.get('manager')
+        
+        department.name = name
+        new_manager = None
+        if manager_id:
+            new_manager = User.objects.get(id=manager_id)
+        department.manager = new_manager
+        department.save()
+        
+        if old_manager and old_manager != new_manager:
+            if not Department.objects.filter(manager=old_manager).exists():
+                old_manager.profile.is_manager = False
+                old_manager.profile.save()
+
+        if new_manager:
+            new_manager.profile.is_manager = True
+            new_manager.profile.save()
+
+        messages.success(request, 'Cập nhật phòng ban thành công.')
+        return redirect('manage_departments')
+    
+    users = User.objects.filter(is_superuser=False, profile__status='approved')
+    context = {
+        'department': department,
+        'users': users
+    }
+    return render(request, 'EditDepartmentPage.html', context)
+
+@user_passes_test(is_admin)
+def delete_department(request, department_id):
+    department = get_object_or_404(Department, id=department_id)
+    department.delete()
+    messages.success(request, 'Xóa phòng ban thành công.')
+    return redirect('manage_departments')
+
+@user_passes_test(is_admin)
+def manage_teams(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        department_id = request.POST.get('department')
+        if name and department_id:
+            Team.objects.create(name=name, department_id=department_id)
+            messages.success(request, 'Thêm ban thành công.')
+        return redirect('manage_teams')
+    
+    teams = Team.objects.all()
+    departments = Department.objects.all()
+    context = {
+        'teams': teams,
+        'departments': departments,
+    }
+    return render(request, 'ManageTeamsPage.html', context)
+
+@user_passes_test(is_admin)
+def edit_team(request, team_id):
+    team = get_object_or_404(Team, id=team_id)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        department_id = request.POST.get('department')
+        
+        team.name = name
+        team.department_id = department_id
+        team.save()
+        
+        messages.success(request, 'Cập nhật ban thành công.')
+        return redirect('manage_teams')
+    
+    departments = Department.objects.all()
+    context = {
+        'team': team,
+        'departments': departments
+    }
+    return render(request, 'EditTeamPage.html', context)
+
+@user_passes_test(is_admin)
+def delete_team(request, team_id):
+    team = get_object_or_404(Team, id=team_id)
+    team.delete()
+    messages.success(request, 'Xóa ban thành công.')
+    return redirect('manage_teams')
+
+@user_passes_test(is_admin)
+def manage_users(request):
+    users = Profile.objects.filter(status='approved')
+    context = {'users': users}
+    return render(request, 'ManageUsersPage.html', context)
+
+@user_passes_test(is_admin)
+def edit_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        department_id = request.POST.get('department')
+        team_id = request.POST.get('team')
+        
+        user.profile.full_name = full_name
+        user.profile.department_id = department_id
+        user.profile.team_id = team_id
+        user.profile.save()
+        
+        messages.success(request, 'Cập nhật người dùng thành công.')
+        return redirect('manage_users')
+    
+    departments = Department.objects.all()
+    teams = Team.objects.all()
+    context = {
+        'user': user,
+        'departments': departments,
+        'teams': teams,
+        'is_admin': True
+    }
+    return render(request, 'EditUserPage.html', context)
+
+@user_passes_test(is_admin)
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.delete()
+    messages.success(request, 'Xóa người dùng thành công.')
+    return redirect('manage_users')

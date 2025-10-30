@@ -12,7 +12,22 @@
         </div>
     </div>
     {% endif %}
-    <h1 class="text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-6">Tài liệu Công Ty</h1>
+    {% if user.is_superuser %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-300">{{ document_count }}</h2>
+            <p class="text-gray-600 dark:text-gray-400">Tài liệu</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-300">{{ user_count }}</h2>
+            <p class="text-gray-600 dark:text-gray-400">Người dùng</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-300">{{ manager_count }}</h2>
+            <p class="text-gray-600 dark:text-gray-400">Quản lý</p>
+        </div>
+    </div>
+    {% endif %}
 
     <div id="document-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {% if not user.is_authenticated %}
@@ -28,7 +43,7 @@
                 <h3 class="text-lg text-white font-bold mb-2">Hãy <a href="{% url 'register' %}" class="text-blue-500 hover:underline">đăng ký</a> nếu chưa có tài khoản</h3>
             </div>
         </div>
-        {% elif not user.profile.department %}
+        {% elif not user.profile.department and not user.is_superuser %}
         <div class="col-span-full text-center text-gray-500 dark:text-gray-400">
             <p>Hồ sơ của bạn chưa có phòng ban. Vui lòng liên hệ với quản trị viên của bạn để được thêm vào một phòng ban.</p>
         </div>
