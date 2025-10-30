@@ -11,6 +11,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.urls import reverse
 from django.utils.html import format_html
+from django.db.models import Count
 
 def is_admin(user):
     return user.is_superuser
@@ -19,35 +20,53 @@ def is_manager(user):
     return hasattr(user, 'profile') and user.profile.is_manager
 
 def HomePage(request):
-  if not request.user.is_authenticated:
+    if not request.user.is_authenticated:
         return render(request, 'HomePage.html', {'documents': Paginator([ ], 12).get_page(1)})
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = None
 
-  try:
-      profile = request.user.profile
-  except Profile.DoesNotExist:
-      profile = None
+    if request.user.is_superuser:
+        documents_list = Document.objects.all().order_by('-created_at')
+    elif profile and profile.department:
+        documents_list = Document.objects.select_related('user', 'author', 'department').filter(department=profile.department).order_by('-created_at')
+    else:
+        documents_list = Document.objects.none()
 
-  if request.user.is_superuser:
-    documents_list = Document.objects.all()
-  elif profile and profile.department:
-      documents_list = Document.objects.select_related('user', 'author', 'department').filter(department=profile.department)
-  else:
-      documents_list = Document.objects.none()
+    paginator = Paginator(documents_list, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'documents': page_obj
+    }
 
-  paginator = Paginator(documents_list, 12)
-  page_number = request.GET.get('page')
-  page_obj = paginator.get_page(page_number)
-  
-  context = {
-    'documents': page_obj
-  }
+    if request.user.is_superuser:
+        context['document_count'] = Document.objects.count()
+        context['user_count'] = User.objects.filter(is_superuser=False).count()
+        context['manager_count'] = Profile.objects.filter(is_manager=True).count()
 
-  if request.user.is_superuser:
-    context['document_count'] = Document.objects.count()
-    context['user_count'] = User.objects.filter(is_superuser=False).count()
-    context['manager_count'] = Profile.objects.filter(is_manager=True).count()
+        department_data = []
+        profiles = Profile.objects.select_related('user', 'department').filter(user__is_superuser=False).order_by('department__name', 'user__username')
 
-  return render(request, 'HomePage.html', context)
+        departments = {}
+        for p in profiles:
+            dept_name = p.department.name if p.department else "Không có phòng ban"
+            if dept_name not in departments:
+                departments[dept_name] = []
+            departments[dept_name].append(p.user.username)
+
+        context['department_data'] = [{'name': name, 'users': users} for name, users in departments.items()]
+
+        context['user_document_counts'] = User.objects.filter(
+            is_superuser=False 
+        ).annotate(
+            doc_count=Count('document') 
+        ).values('username', 'doc_count').order_by('-doc_count')
+
+
+    return render(request, 'HomePage.html', context)
 
 def DocumentDetailPage(request, document_id):
     document = get_object_or_404(Document.objects.select_related('user', 'author'), id=document_id)
@@ -104,7 +123,7 @@ def LoginPage(request):
         login(request, user)
         
         if user.is_superuser:
-            return redirect('manage_departments')
+            return redirect('home')
         
         if hasattr(user, 'profile') and user.profile.is_manager:
             messages.success(request, f'Chào mừng quản lý, {user.username}!')
@@ -346,7 +365,7 @@ def delete_document(request, document_id):
 @login_required
 def ManagementPage(request):
     if not (hasattr(request.user, 'profile') and request.user.profile.is_manager):
-        messages.error(request, "You do not have permission to access this page.")
+        messages.error(request, "Bạn không có quyền truy cập trang này.")
         return redirect('/')
 
     try:
@@ -372,14 +391,14 @@ def ManagementPage(request):
 @login_required
 def manage_employee(request, employee_id):
     if not (hasattr(request.user, 'profile') and request.user.profile.is_manager):
-        messages.error(request, "You do not have permission to access this page.")
+        messages.error(request, "Bạn không có quyền truy cập trang này.")
         return redirect('/')
     
     manager_department = request.user.profile.department
     employee = get_object_or_404(User, id=employee_id)
 
     if employee.profile.department != manager_department:
-        messages.error(request, "You do not have permission to edit this employee.")
+        messages.error(request, "Bạn không có quyền chỉnh sửa nhân viên này.")
         return redirect('management')
 
     if request.method == 'POST':
@@ -389,7 +408,7 @@ def manage_employee(request, employee_id):
         employee.profile.team = Team.objects.get(id=team_id) if team_id else None
         employee.profile.save()
 
-        messages.success(request, f"Employee {employee.username} has been updated.")
+        messages.success(request, f"Nhân viên {employee.username} đã được cập nhật thành công.")
         return redirect('management')
 
     teams = Team.objects.filter(department=manager_department)
@@ -403,13 +422,13 @@ def manage_employee(request, employee_id):
 @login_required
 def manage_document(request, document_id):
     if not (hasattr(request.user, 'profile') and request.user.profile.is_manager):
-        messages.error(request, "You do not have permission to access this page.")
+        messages.error(request, "Bạn không có quyền truy cập trang này.")
         return redirect('/')
 
     document = get_object_or_404(Document, id=document_id)
     
     if document.department != request.user.profile.department:
-        messages.error(request, "You do not have permission to edit this document.")
+        messages.error(request, "Bạn không có quyền chỉnh sửa tài liệu này.")
         return redirect('management')
 
     if request.method == 'POST':
@@ -438,37 +457,37 @@ def manage_document(request, document_id):
 @login_required
 def delete_employee(request, employee_id):
     if not (hasattr(request.user, 'profile') and request.user.profile.is_manager):
-        messages.error(request, "You do not have permission to access this page.")
+        messages.error(request, "Bạn không có quyền truy cập trang này.")
         return redirect('/')
 
     employee = get_object_or_404(User, id=employee_id)
     if employee.profile.department != request.user.profile.department:
-        messages.error(request, "You do not have permission to delete this employee.")
+        messages.error(request, "Bạn không có quyền xóa nhân viên này.")
         return redirect('management')
         
     employee.delete()
-    messages.success(request, f"Employee {employee.username} has been deleted.")
+    messages.success(request, f"Nhân viên {employee.username} đã bị xóa.")
     return redirect('management')
 
 @login_required
 def delete_managed_document(request, document_id):
     if not (hasattr(request.user, 'profile') and request.user.profile.is_manager):
-        messages.error(request, "You do not have permission to access this page.")
+        messages.error(request, "Bạn không có quyền truy cập trang này.")
         return redirect('/')
 
     document = get_object_or_404(Document, id=document_id)
     if document.department != request.user.profile.department:
-        messages.error(request, "You do not have permission to delete this document.")
+        messages.error(request, "Bạn không có quyền xóa tài liệu này")
         return redirect('management')
 
     document.delete()
-    messages.success(request, f"Document '{document.title}' has been deleted.")
+    messages.success(request, f"Tài liệu '{document.title}' đã được xóa.")
     return redirect('management')
 
 @login_required
 def ApprovalPage(request):
     if not (request.user.is_superuser or (hasattr(request.user, 'profile') and request.user.profile.is_manager)):
-        messages.error(request, "You do not have permission to access this page.")
+        messages.error(request, "Bạn không có quyền truy cập trang này.")
         return redirect('/')
 
     if request.user.is_superuser:
@@ -485,14 +504,14 @@ def ApprovalPage(request):
 @login_required
 def approve_user(request, user_id):
     if not (request.user.is_superuser or (hasattr(request.user, 'profile') and request.user.profile.is_manager)):
-        messages.error(request, "You do not have permission to perform this action.")
+        messages.error(request, "Bạn không có quyền thực hiện hành động này.")
         return redirect('/')
 
     user_to_approve = get_object_or_404(User, id=user_id)
     
     if hasattr(request.user, 'profile') and request.user.profile.is_manager and not request.user.is_superuser:
         if user_to_approve.profile.department != request.user.profile.department:
-            messages.error(request, "You do not have permission to approve this user.")
+            messages.error(request, "Bạn không có quyền phê duyệt nhân viên này.")
             return redirect('approval_page')
 
     user_to_approve.is_active = True
@@ -501,27 +520,27 @@ def approve_user(request, user_id):
     user_to_approve.save()
     user_to_approve.profile.save()
 
-    messages.success(request, f"User {user_to_approve.username} has been approved.")
+    messages.success(request, f"Nhân viên {user_to_approve.username} đã được duyệt")
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def reject_user(request, user_id):
     if not (request.user.is_superuser or (hasattr(request.user, 'profile') and request.user.profile.is_manager)):
-        messages.error(request, "You do not have permission to perform this action.")
+        messages.error(request, "Bạn không có quyền thực hiện hành động này.")
         return redirect('/')
 
     user_to_reject = get_object_or_404(User, id=user_id)
 
     if hasattr(request.user, 'profile') and request.user.profile.is_manager and not request.user.is_superuser:
         if user_to_reject.profile.department != request.user.profile.department:
-            messages.error(request, "You do not have permission to reject this user.")
+            messages.error(request, "Bạn không có quyền từ chối nhân viên này.")
             return redirect('approval_page')
 
     user_to_reject.profile.status = 'rejected'
     user_to_reject.profile.save()
     user_to_reject.delete()
 
-    messages.success(request, f"User {user_to_reject.username} has been rejected.")
+    messages.success(request, f"Nhân viên {user_to_reject.username} đã bị từ chối.")
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def Search(request):

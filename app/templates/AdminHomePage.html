@@ -1,0 +1,25 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block content %}
+<title>Admin Home</title>
+<div class="container mx-auto mt-8">
+    <h1 class="text-2xl font-bold mb-4">Users in {{ department.name }}</h1>
+    <table class="min-w-full bg-white">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">User</th>
+                <th class="py-2 px-4 border-b">Document Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in user_document_counts %}
+            <tr>
+                <td class="py-2 px-4 border-b">{{ item.user.profile.full_name }}</td>
+                <td class="py-2 px-4 border-b">{{ item.document_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
