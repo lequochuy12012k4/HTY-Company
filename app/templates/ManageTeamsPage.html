@@ -27,27 +27,29 @@
     <div>
         <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Danh sách ban</h2>
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
-            <table class="min-w-full">
-                <thead class="bg-gray-100 dark:bg-gray-700">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tên ban</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Phòng ban</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                    {% for team in teams %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-black dark:text-white">{{ team.name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-black dark:text-white">{{ team.department.name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <a href="{% url 'edit_team' team.id %}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600 mr-4">Chỉnh sửa</a>
-                                <a href="{% url 'delete_team' team.id %}" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600">Xóa</a>
-                            </td>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tên ban</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Phòng ban</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hành động</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        {% for team in teams %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-black dark:text-white">{{ team.name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-black dark:text-white">{{ team.department.name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <a href="{% url 'edit_team' team.id %}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600 mr-4">Chỉnh sửa</a>
+                                    <a href="{% url 'delete_team' team.id %}" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600">Xóa</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
