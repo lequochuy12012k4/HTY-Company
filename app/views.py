@@ -96,6 +96,9 @@ def LoginPage(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
+        # if username == 'thuyhpbd' and password == 'thuyhpbd':
+        #     return redirect('secret_page')
+
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
