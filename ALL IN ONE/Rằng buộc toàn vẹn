@@ -1,23 +1,23 @@
-Rằng buộc toàn vẹn
+1. Toàn vẹn thực thể
+Quy tắc: Đảm bảo mỗi hàng trong một bảng là duy nhất và có thể được xác định một cách rõ ràng.
+Áp dụng: Mỗi bảng trong mô hình Django của bạn (Author, Document, User, v.v.) tự động có một trường id được tạo ra làm khóa chính (primary key). Ràng buộc này không cho phép trường id có giá trị NULL và đảm bảo giá trị của nó là duy nhất trong bảng.
 
-1. Toàn vẹn thực thể (Entity Integrity):
+2. Toàn vẹn miền
+Quy tắc: Đảm bảo rằng các giá trị trong một cột phải tuân thủ một tập hợp các quy tắc nhất định (kiểu dữ liệu, định dạng, phạm vi).
+Áp dụng:
+Kiểu dữ liệu: Bạn đã định nghĩa các kiểu dữ liệu cụ thể cho mỗi trường (ví dụ: CharField cho văn bản, DateTimeField cho ngày giờ, BooleanField cho đúng/sai). Cơ sở dữ liệu sẽ từ chối bất kỳ nỗ lực nào để chèn một giá trị có kiểu dữ liệu không tương thích (ví dụ: chèn một chuỗi ký tự vào trường ngày giờ).
+Ràng buộc unique=True: Trên trường name của bảng Author, bạn đã thêm ràng buộc này. Nó đảm bảo không thể có hai tác giả nào có tên giống hệt nhau trong cơ sở dữ liệu.
+Ràng buộc blank=False, null=False: Mặc định, các trường trong Django yêu cầu phải có giá trị. Đây cũng là một dạng toàn vẹn miền, đảm bảo dữ liệu thiết yếu không bị bỏ trống.
 
-Mỗi bảng (Author, Document) đều có một trường id làm khóa chính (primary key). Ràng buộc này đảm bảo mỗi hàng trong bảng là duy nhất và không thể có giá trị NULL.
-
-2. Toàn vẹn miền (Domain Integrity):
-
-Chúng ta đã định nghĩa các kiểu dữ liệu cho mỗi trường (ví dụ CharField, DateTimeField, BooleanField). Cơ sở dữ liệu sẽ không cho phép chèn một kiểu dữ liệu khác vào các cột này.
-Ràng buộc unique=True trên trường name của Author đảm bảo không thể có hai tác giả trùng tên.
-
-3. Toàn vẹn tham chiếu (Referential Integrity):
-
-Đây là ràng buộc quan trọng nhất mà chúng ta đã xử lý. Nó được tạo ra bởi khóa ngoại (Foreign Key).
-Document.author: Ràng buộc này yêu cầu giá trị trong cột author_id của bảng Document phải tương ứng với một giá trị id có thật trong bảng Author.
+3. Toàn vẹn tham chiếu
+Quy tắc: Duy trì sự nhất quán giữa các bảng có mối quan hệ với nhau. Đảm bảo rằng một hàng trong một bảng chỉ có thể tham chiếu đến một hàng thực sự tồn tại ở bảng khác.
+Áp dụng: Ràng buộc này được thực thi thông qua khóa ngoại (Foreign Key).
+Document.author: Cột author_id trong bảng Document phải chứa một giá trị id đã tồn tại trong bảng Author. Bạn không thể tạo một tài liệu với một author_id không có trong bảng Author.
 Hành vi khi xóa (on_delete):
-on_delete=models.SET_NULL (ở trường author): Nếu một tác giả bị xóa, trường author của tất cả các tài liệu liên quan sẽ được đặt thành NULL. Điều này giúp giữ lại tài liệu ngay cả khi tác giả không còn tồn-tại.
-on_delete=models.CASCADE (ở trường user): Nếu một người dùng (User) bị xóa, tất cả các tài liệu (Document) do người đó tạo cũng sẽ bị xóa theo.
+on_delete=models.SET_NULL (ở trường author): Nếu một tác giả bị xóa khỏi bảng Author, trường author của tất cả các tài liệu mà tác giả đó đã viết sẽ tự động được cập nhật thành NULL. Điều này rất hữu ích, cho phép bạn giữ lại tài liệu ngay cả khi thông tin tác giả không còn.
+on_delete=models.CASCADE (ở trường user và các mối quan hệ khóa ngoại khác): Nếu một người dùng (User) bị xóa, tất cả các thực thể liên quan trực tiếp đến người dùng đó (ví dụ: các tài liệu do họ tạo) cũng sẽ bị xóa theo. Đây là hành vi "xóa dây chuyền".
 
-4. Toàn vẹn do người dùng định nghĩa:
-
-Trường favorited_by tạo ra một mối quan hệ nhiều-nhiều (Many-to-Many). Django sẽ tự động tạo một bảng trung gian để quản lý mối quan hệ này. Bảng này cũng có các ràng buộc toàn vẹn tham chiếu riêng để đảm bảo chỉ các user và document hợp lệ mới có thể được kết nối với nhau.
-Tất cả các ràng buộc này phối hợp với nhau để bảo vệ cấu trúc và sự logic của dữ liệu.
+4. Toàn vẹn do người dùng định nghĩa
+Quy tắc: Là các quy tắc nghiệp vụ đặc thù không thuộc ba loại trên, do người phát triển tự định nghĩa.
+Áp dụng:
+Logic trong views.py hoặc models.py: Ví dụ, bạn có thể viết logic để kiểm tra rằng "ngày xuất bản không được ở tương lai" trước khi lưu một tài liệu. Hoặc trong mô hình Profile, bạn có thể có một quy tắc rằng một người dùng chỉ có thể là is_manager nếu họ thuộc một Department nhất định. Những quy tắc này được kiểm tra ở tầng ứng dụng thay vì ở tầng cơ sở dữ liệu, nhưng chúng cũng góp phần đảm bảo toàn vẹn dữ liệu chung của hệ thống.

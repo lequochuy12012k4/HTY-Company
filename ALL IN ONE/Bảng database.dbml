@@ -1,0 +1,76 @@
+//// --------------------------------------------------------------------------------
+//// DBML (Database Markup Language) generated for dbdiagram.io
+//// --------------------------------------------------------------------------------
+
+// --- Tables based on Django models ---
+
+Table Department as D {
+  id integer [pk, increment]
+  name varchar [unique, not null]
+  manager_id integer [note: 'FK to auth_user.id']
+}
+
+Table Team as T {
+  id integer [pk, increment]
+  name varchar [not null]
+  department_id integer [not null]
+}
+
+Table auth_user as U {
+  id integer [pk, increment]
+  username varchar [unique, not null]
+  email varchar
+  first_name varchar
+  last_name varchar
+}
+
+Table Profile as P {
+  id integer [pk, increment]
+  user_id integer [unique, not null]
+  full_name varchar [not null]
+  department_id integer
+  team_id integer
+  is_manager boolean [default: false]
+  is_approved boolean [default: false]
+  status varchar [default: 'pending', note: 'Choices: pending, approved, rejected']
+}
+
+Table Author as A {
+  id integer [pk, increment]
+  name varchar [unique, not null]
+}
+
+Table Document as Doc {
+  id integer [pk, increment]
+  title varchar [not null]
+  description text
+  image varchar
+  document varchar
+  author_id integer
+  created_at timestamp
+  updated_at timestamp
+  user_id integer
+  department_id integer
+}
+
+// M2M join table for Document Favorites
+Table document_favorites {
+  document_id integer [pk]
+  user_id integer [pk]
+}
+
+// --- Relationships ---
+
+Ref: U.id < D.manager_id
+Ref: D.id < T.department_id
+
+Ref: U.id - P.user_id
+Ref: D.id < P.department_id
+Ref: T.id < P.team_id
+
+Ref: A.id < Doc.author_id
+Ref: U.id < Doc.user_id
+Ref: D.id < Doc.department_id
+
+Ref: Doc.id < document_favorites.document_id
+Ref: U.id < document_favorites.user_id
