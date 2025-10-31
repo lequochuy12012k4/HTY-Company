@@ -2,6 +2,14 @@
 <div class="container mx-auto mt-8 p-4">
     <h1 class="text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-6">Tài liệu Yêu thích</h1>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {% for document in documents %}
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
