@@ -21,18 +21,18 @@
                 {% if user.is_superuser %}
                     <a href="{% url 'manage_departments' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phòng</a>
                     <a href="{% url 'manage_teams' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Ban</a>
-                    <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Người dùng</a>
-                    <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phê duyệt</a>
+                    <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Nhân viên</a>
+                    <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Xét duyệt</a>
                 {% elif user.profile.is_manager %}
                 <a href="{% url 'manage_departments' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phòng</a>
                 <a href="{% url 'manage_teams' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Ban</a>
-                <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Người dùng</a>
-                <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phê duyệt</a>
+                <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Nhân viên</a>
+                <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Xét duyệt</a>
                 {% else %}
                 <a href="{% url 'manage_departments' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phòng</a>
                 <a href="{% url 'manage_teams' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Ban</a>
-                <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Người dùng</a>
-                <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phê duyệt</a>
+                <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Nhân viên</a>
+                <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Xét duyệt</a>
                 {% endif %}
                 <a href="{% url 'profile' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">admin</a>
                 <a href="{% url 'logout' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300"><i class="fas fa-sign-out-alt"></i></a>
@@ -53,18 +53,18 @@
             {% if user.is_superuser %}
                 <a href="{% url 'manage_departments' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phòng</a>
                 <a href="{% url 'manage_teams' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Ban</a>
-                <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Người dùng</a>
-                <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phê duyệt</a>
+                <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Nhân viên</a>
+                <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Xét duyệt</a>
             {% elif user.profile.is_manager %}
             <a href="{% url 'manage_departments' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phòng</a>
             <a href="{% url 'manage_teams' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Ban</a>
-            <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Người dùng</a>
-            <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phê duyệt</a>
+            <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Nhân viên</a>
+            <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Xét duyệt</a>
             {% else %}
             <a href="{% url 'manage_departments' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phòng</a>
             <a href="{% url 'manage_teams' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Ban</a>
-            <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Người dùng</a>
-            <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phê duyệt</a>
+            <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Nhân viên</a>
+            <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Xét duyệt</a>
             {% endif %}
             <a href="{% url 'profile' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">admin</a>
             <a href="{% url 'logout' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-sign-out-alt"></i></a>
