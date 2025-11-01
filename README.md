@@ -33,7 +33,7 @@
 Đây là một ứng dụng web được xây dựng bằng Django, cho phép người dùng quản lý, tải lên, và chia sẻ tài liệu. Ứng dụng cung cấp các tính năng như quản lý tài liệu, tác giả, và cho phép người dùng đánh dấu các tài liệu yêu thích.
 
 ## Công nghệ sử dụng
-**Frontend:** ![HTML5](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+**Frontend:** ![HTML5](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css&logoColor=white) ![JavaScript](https.img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 **Backend:** ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 
@@ -52,63 +52,33 @@
 
 ### Yêu cầu hệ thống
 
-*   Python 3.x (tải Python tại <a href="https://www.python.org/ftp/python/3.13.7/python-3.13.7-amd64.exe">đây</a>, nhớ tick phần "Add to PATH" khi cài đặt Python)
-*   pip (trình quản lý gói cho Python, đã được tải cùng khi tải Python)
-*   Node.js (để cài đặt và chạy Tailwind CSS, tải Nodejs tại <a href="https://nodejs.org/dist/v24.9.0/node-v24.9.0-x64.msi">đây</a> )
-*   npm (trình quản lý gói cho Nodejs, đã được tải cùng khi tải Nodejs)
-*   Git (để clone source code từ Github, tải Git tại <a href="https://git-scm.com/downloads/win">đây</a> )
+*   Python 3.x
+*   pip (trình quản lý gói cho Python)
+*   Node.js
+*   npm (trình quản lý gói cho Node.js)
+*   Git
 
 ### Các bước cài đặt
 
-1.  **Clone repository về máy của bạn:**
+#### Đối với Windows:
+
+1.  Mở Command Prompt hoặc PowerShell.
+2.  Chạy file `setup.bat`:
     ```bash
-    git clone https://github.com/lequochuy12012k4/HTY-Company
+    setup.bat
     ```
 
-2.  **Tạo và kích hoạt môi trường ảo (virtual environment):**
-    *   Trên macOS và Linux:
-        ```bash
-        python3 -m venv venv
-        source venv/bin/activate
-        ```
-    *   Trên Windows:
-        ```bash
-        python -m venv venv
-        .\venv\Scripts\activate
-        ```
+#### Đối với macOS và Linux:
 
-3.  **Cài đặt các thư viện Python cần thiết:**
+1.  Mở Terminal.
+2.  Cấp quyền thực thi cho file `setup.sh` (chỉ cần làm một lần):
     ```bash
-    pip install -r requirements.txt
+    chmod +x setup.sh
     ```
-
-4.  **Cài đặt các gói frontend:**
-    (Nếu có `package.json`, chạy lệnh sau để cài đặt các gói cần thiết cho frontend, bao gồm Tailwind CSS)
+3.  Chạy file `setup.sh`:
     ```bash
-    npm install
+    ./setup.sh
     ```
-
-5.  **Thực hiện di chuyển cơ sở dữ liệu (database migrations):**
-    Lệnh này sẽ tạo các bảng cần thiết trong cơ sở dữ liệu.
-    ```bash
-    python manage.py migrate
-    ```
-
-6.  **Build các tài sản frontend (frontend assets):**
-    (Nếu có script build:css trong `package.json` để biên dịch Tailwind CSS)
-    ```bash
-    npm run build:css
-    ```
-
-### Chạy ứng dụng
-
-1.  **Khởi động server phát triển:**
-    ```bash
-    python manage.py runserver
-    ```
-
-2.  **Truy cập ứng dụng:**
-    Mở trình duyệt web và truy cập vào địa chỉ `http://127.0.0.1:8000/`.
 
 ## Cấu trúc dự án
 
