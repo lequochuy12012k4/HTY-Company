@@ -63,14 +63,43 @@
 #### Đối với Windows:
 
 1.  Mở Command Prompt hoặc PowerShell.
-2.  Chạy file `setup.bat`:
+2.  Tạo 1 file `setup.bat` và copy nội dung sau:
     ```bash
-    setup.bat
+    @echo off
+    echo Cloning repository...
+    git clone https://github.com/lequochuy12012k4/HTY-Company
+    echo Installing Python requirements...
+    pip install -r requirements.txt
+    echo Migrate to database
+    python manage.py makemigrations
+    python manage.py migrate
+    echo Setup complete.
+    echo Server is running at http://127.0.0.1:8000/
+    python manage.py runserver
+    pause
     ```
 
 #### Đối với macOS và Linux:
 
 1.  Mở Terminal.
+2.  Tạo 1 file `setup.sh` và copy nội dung sau:
+    ```bash
+    echo "Cloning repository..."
+    git clone https://github.com/lequochuy12012k4/HTY-Company
+    echo "Changing directory to HTY-Company..."
+    cd HTY-Company
+    echo "setup virtual enviroment"
+    python -m venv .venv
+    source .venv/bin/activate
+    echo "Installing Python requirements..."
+    pip install -r requirements.txt
+    echo Migrate to database
+    python manage.py makemigrations
+    python manage.py migrate
+    echo Setup complete.
+    echo Server is running at http://127.0.0.1:8000/
+    python manage.py runserver
+    ```
 2.  Cấp quyền thực thi cho file `setup.sh` (chỉ cần làm một lần):
     ```bash
     chmod +x setup.sh
