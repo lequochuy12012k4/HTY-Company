@@ -78,7 +78,10 @@
     python manage.py runserver
     pause
     ```
-
+3.  Chạy file `setup.bat`:
+    ```bash
+    setup.bat
+    ```
 #### Đối với macOS và Linux:
 
 1.  Mở Terminal.
@@ -100,11 +103,11 @@
     echo Server is running at http://127.0.0.1:8000/
     python manage.py runserver
     ```
-2.  Cấp quyền thực thi cho file `setup.sh` (chỉ cần làm một lần):
+3.  Cấp quyền thực thi cho file `setup.sh` (chỉ cần làm một lần):
     ```bash
     chmod +x setup.sh
     ```
-3.  Chạy file `setup.sh`:
+4.  Chạy file `setup.sh`:
     ```bash
     ./setup.sh
     ```
