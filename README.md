@@ -68,6 +68,8 @@
     @echo off
     echo Cloning repository...
     git clone https://github.com/lequochuy12012k4/HTY-Company
+    echo "Changing directory to HTY-Company..."
+    cd HTY-Company
     echo Installing Python requirements...
     pip install -r requirements.txt
     echo Migrate to database
