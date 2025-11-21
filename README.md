@@ -1,4 +1,4 @@
-<table>
+   <table>
   <tr>
     <td width="100" valign="middle">
       <img src="app/static/images/icontab.png" alt="Logo ứng dụng" width="100">
