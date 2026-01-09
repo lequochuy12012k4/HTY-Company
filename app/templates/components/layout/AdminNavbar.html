@@ -1,0 +1,144 @@
+{% load static %}
+<nav class="bg-gray-100 dark:bg-gray-800 p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="{% url 'home' %}" class="text-2xl font-bold text-gray-800 dark:text-white mr-8">HTY Company</a>
+
+        {% if user.is_authenticated %}
+        <div class="hidden md:flex flex-grow justify-center items-center">
+            <div class="relative w-full max-w-lg">
+                <input type="text" id="desktop-search-input" placeholder="Tìm kiếm..." class="w-full p-2 pl-10 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white dark:bg-gray-900 dark:text-white">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+                <div id="desktop-search-results" class="absolute top-full text-black left-0 w-full bg-white dark:bg-gray-900 border dark:border-gray-700 rounded-md mt-1 z-10 hidden shadow-lg">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="hidden md:flex space-x-4 ml-8 items-center">
+            {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                    <a href="{% url 'manage_departments' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phòng</a>
+                    <a href="{% url 'manage_teams' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Ban</a>
+                    <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Nhân viên</a>
+                    <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Xét duyệt</a>
+                {% elif user.profile.is_manager %}
+                <a href="{% url 'manage_departments' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phòng</a>
+                <a href="{% url 'manage_teams' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Ban</a>
+                <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Nhân viên</a>
+                <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Xét duyệt</a>
+                {% else %}
+                <a href="{% url 'manage_departments' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Phòng</a>
+                <a href="{% url 'manage_teams' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Ban</a>
+                <a href="{% url 'manage_users' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Nhân viên</a>
+                <a href="{% url 'approval_page' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Xét duyệt</a>
+                {% endif %}
+                <a href="{% url 'profile' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">admin</a>
+                <a href="{% url 'logout' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300"><i class="fas fa-sign-out-alt"></i></a>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300">Đăng nhập</a>
+            {% endif %}
+        </div>
+
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-button" class="text-gray-800 dark:text-white focus:outline-none">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+          </button>
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden mt-4 bg-gray-100 dark:bg-gray-800">
+        {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+                <a href="{% url 'manage_departments' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phòng</a>
+                <a href="{% url 'manage_teams' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Ban</a>
+                <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Nhân viên</a>
+                <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Xét duyệt</a>
+            {% elif user.profile.is_manager %}
+            <a href="{% url 'manage_departments' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phòng</a>
+            <a href="{% url 'manage_teams' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Ban</a>
+            <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Nhân viên</a>
+            <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Xét duyệt</a>
+            {% else %}
+            <a href="{% url 'manage_departments' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Phòng</a>
+            <a href="{% url 'manage_teams' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Ban</a>
+            <a href="{% url 'manage_users' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Nhân viên</a>
+            <a href="{% url 'approval_page' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Xét duyệt</a>
+            {% endif %}
+            <a href="{% url 'profile' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">admin</a>
+            <a href="{% url 'logout' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-sign-out-alt"></i></a>
+        {% else %}
+            <a href="{% url 'login' %}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">Đăng nhập</a>
+        {% endif %}
+    </div>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const desktopSearchInput = document.getElementById('desktop-search-input');
+    const desktopSearchResults = document.getElementById('desktop-search-results');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    function setupSearch(input, resultsContainer) {
+        if (!input) return;
+
+        const debouncedSearch = debounce(function(query) {
+            if (query.length > 0) {
+                fetch(`{% url 'search' %}?q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        resultsContainer.innerHTML = '';
+                        if (data.length > 0) {
+                            data.forEach(doc => {
+                                const resultItem = document.createElement('a');
+                                resultItem.href = `/document/${doc.id}/`;
+                                resultItem.className = 'block p-2 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border-b dark:border-gray-600';
+                                resultItem.textContent = doc.title;
+                                resultsContainer.appendChild(resultItem);
+                            });
+                            resultsContainer.classList.remove('hidden');
+                        } else {
+                            const noResultItem = document.createElement('div');
+                            noResultItem.className = 'p-2 text-gray-500 dark:text-gray-300';
+                            noResultItem.textContent = 'Không tìm thấy tài liệu';
+                            resultsContainer.appendChild(noResultItem);
+                            resultsContainer.classList.remove('hidden');
+                        }
+                    });
+            } else {
+                resultsContainer.classList.add('hidden');
+            }
+        }, 300);
+
+        input.addEventListener('keyup', function() {
+            debouncedSearch(input.value);
+        });
+
+        document.addEventListener('click', function(event) {
+            if (resultsContainer && !input.contains(event.target) && !resultsContainer.contains(event.target)) {
+                resultsContainer.classList.add('hidden');
+            }
+        });
+    }
+
+    {% if user.is_authenticated %}
+    setupSearch(desktopSearchInput, desktopSearchResults);
+    {% endif %}
+});
+</script>

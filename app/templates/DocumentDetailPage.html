@@ -1,0 +1,171 @@
+{% extends 'Base.html' %}
+{% block content %}
+<title>{{ document.title }}</title>
+<div class="container mx-auto mt-8 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+        <img src="{{ document.image.url }}" alt="Document Image" class="w-full h-64 md:h-96 object-cover">
+        <div class="p-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">{{ document.title }}</h1>
+            {% if document.author %}
+            <p class="text-lg text-gray-600 dark:text-gray-400 mb-2">
+                <strong>Tác giả:</strong> <a href="{% url 'author-detail' document.author.id %}" class="text-blue-500 hover:underline">{{ document.author.name }}</a>
+            </p>
+            {% endif %}
+            <p class="text-md text-gray-700 dark:text-gray-300 mb-6">{{ document.description }}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><i>Được thêm bởi: {{ document.user.username }}</i></p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><i>Được tải lên lúc: {{ document.created_at }}</i></p>
+            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mt-6">
+                <button id="preview-button" class="w-full md:w-auto text-white bg-green-500 hover:bg-green-600 px-5 py-2 rounded-md text-lg transition duration-300">Xem trước</button>
+                <a href="{{ document.document.url }}" download class="w-full md:w-auto text-center text-white bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-md text-lg transition duration-300">Tải xuống</a>
+                <form action="{% url 'toggle-favorite' document.id %}" method="POST" class="w-full md:w-auto">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full text-white {% if is_favorite %}bg-red-500 hover:bg-red-600{% else %}bg-yellow-500 hover:bg-yellow-600{% endif %} px-5 py-2 rounded-md text-lg transition duration-300">
+                        {% if is_favorite %}
+                            Bỏ yêu thích
+                        {% else %}
+                            Yêu thích
+                        {% endif %}
+                    </button>
+                </form>
+                <a href="{% url 'home' %}" class="w-full md:w-auto text-center text-gray-700 bg-gray-200 hover:bg-gray-300 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-700 px-5 py-2 rounded-md text-lg transition duration-300">Quay lại</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PDF Preview Modal -->
+<div id="pdf-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl h-full flex flex-col">
+        <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
+            <h2 class="text-xl md:text-2xl font-semibold truncate pr-2 dark:text-gray-200">{{ document.title }}</h2>
+            <button id="close-modal" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 text-3xl leading-none">&times;</button>
+        </div>
+        <div id="pdf-viewer" class="flex-grow p-2 overflow-auto text-center">
+            <div id="loading-indicator" class="flex justify-center items-center h-full">
+                <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+            </div>
+            <canvas id="pdf-canvas" class="mx-auto"></canvas>
+        </div>
+        <div id="pdf-controls" class="hidden flex justify-between items-center p-2 md:p-4 border-t dark:border-gray-700">
+            <button id="prev-page" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">Trước</button>
+            <span id="page-num" class="text-sm md:text-base dark:text-gray-200"></span>
+            <button id="next-page" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">Sau</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const previewButton = document.getElementById('preview-button');
+    const modal = document.getElementById('pdf-modal');
+    const closeModal = document.getElementById('close-modal');
+    const pdfViewer = document.getElementById('pdf-viewer');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const canvas = document.getElementById('pdf-canvas');
+    const pageNumSpan = document.getElementById('page-num');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pdfControls = document.getElementById('pdf-controls');
+
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    const ctx = canvas.getContext('2d');
+
+    const renderPage = num => {
+        pageRendering = true;
+        loadingIndicator.style.display = 'flex';
+        canvas.style.display = 'none';
+
+        pdfDoc.getPage(num).then(page => {
+            const containerWidth = pdfViewer.clientWidth;
+            const viewport = page.getViewport({ scale: 1 });
+            
+            const isMobile = window.innerWidth < 768;
+            const scaleMultiplier = isMobile ? 1.5 : 1.0;
+            const scale = (containerWidth / viewport.width) * scaleMultiplier;
+
+            const scaledViewport = page.getViewport({ scale: scale });
+
+            canvas.height = scaledViewport.height;
+            canvas.width = scaledViewport.width;
+
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: scaledViewport
+            };
+            const renderTask = page.render(renderContext);
+
+            renderTask.promise.then(() => {
+                pageRendering = false;
+                loadingIndicator.style.display = 'none';
+                canvas.style.display = 'block';
+                if (pageNumPending !== null) {
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
+            });
+        });
+        pageNumSpan.textContent = `Trang ${num} / ${pdfDoc.numPages}`;
+    };
+
+    const queueRenderPage = num => {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
+        }
+    };
+
+    prevPageBtn.addEventListener('click', () => {
+        if (pageNum <= 1) return;
+        pageNum--;
+        queueRenderPage(pageNum);
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+        if (pageNum >= pdfDoc.numPages) return;
+        pageNum++;
+        queueRenderPage(pageNum);
+    });
+
+    previewButton.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        const pdfUrl = "{{ document.document.url }}";
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js`;
+
+        pdfjsLib.getDocument(pdfUrl).promise.then(doc => {
+            pdfDoc = doc;
+            if (doc.numPages > 0) {
+                pdfControls.classList.remove('hidden');
+            }
+            renderPage(pageNum);
+        }).catch(err => {
+            console.error('Error loading PDF:', err);
+            loadingIndicator.textContent = 'Failed to load PDF.';
+        });
+    });
+
+    closeModal.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+        pdfDoc = null;
+        pageNum = 1;
+        pdfControls.classList.add('hidden');
+    });
+    
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        if (pdfDoc) {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                queueRenderPage(pageNum);
+            }, 200);
+        }
+    });
+});
+</script>
+{% endblock %}

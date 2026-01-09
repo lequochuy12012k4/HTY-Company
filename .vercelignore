@@ -1,0 +1,19 @@
+
+# Vercel Ignore
+
+# IDE specific folders
+.vscode/
+
+# Documents
+*.docx
+
+# Project analysis files
+ALL IN ONE/
+
+# Database files
+*.db
+*.sqlite3
+
+# ERD and SQL files
+*.erd
+*.sql

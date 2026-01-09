@@ -1,0 +1,46 @@
+1. Chuẩn hóa dạng 1
+Quy tắc:
+
+Mỗi cột phải chứa các giá trị nguyên tử (không thể phân chia nhỏ hơn).
+Không có các nhóm thuộc tính lặp lại.
+Mỗi bảng phải có một khóa chính để xác định duy nhất mỗi hàng.
+Phân tích:
+
+Tính nguyên tử: Tất cả các trường trong các bảng của bạn như name (CharField), title (CharField), created_at (DateTimeField) đều chứa các giá trị nguyên tử. Ví dụ, không có trường nào lưu một danh sách các giá trị như "tác giả 1, tác giả 2".
+Khóa chính: Cả hai bảng Author và Document đều có một trường id được Django tự động tạo ra làm khóa chính, đảm bảo mỗi hàng là duy nhất.
+Không lặp lại nhóm: Trường favorited_by (ManyToManyField) được Django xử lý một cách thông minh bằng cách tạo ra một bảng trung gian riêng (app_document_favorited_by). Bảng này tuân thủ 1NF vì nó có khóa chính riêng và mỗi cột (document_id, user_id) chỉ chứa một giá trị nguyên tử, tránh được việc lưu một danh sách các ID người dùng trong cùng một ô.
+=> Kết luận: Đạt 1NF.
+
+2. Chuẩn hóa dạng 2
+Quy tắc:
+
+Phải đạt 1NF.
+Mọi thuộc tính không phải là khóa phải phụ thuộc chức năng đầy đủ vào toàn bộ khóa chính. (Quy tắc này đặc biệt quan trọng đối với các bảng có khóa chính kết hợp từ nhiều cột).
+Phân tích:
+
+Các bảng chính của bạn (Author, Document) đều sử dụng một khóa chính đơn giản (chỉ là trường id).
+Khi khóa chính chỉ bao gồm một cột duy nhất, không thể có "sự phụ thuộc một phần" (partial dependency). Bất kỳ thuộc tính nào phụ thuộc vào khóa chính thì nó sẽ tự động phụ thuộc vào "toàn bộ" khóa chính.
+Ví dụ, trong bảng Document, các thuộc tính như title, description, author_id đều phụ thuộc vào id của tài liệu.
+=> Kết luận: Đạt 2NF (một cách mặc nhiên vì không có khóa chính phức hợp).
+
+3. Chuẩn hóa dạng 3
+Quy tắc:
+
+Phải đạt 2NF.
+Không có sự phụ thuộc bắc cầu (transitive dependency). Tức là, một thuộc tính không phải khóa không được phụ thuộc vào một thuộc tính không phải khóa khác.
+Phân tích:
+
+Đây là điểm cải tiến quan trọng nhất trong thiết kế của bạn:
+
+Trước khi thay đổi (giả sử): Nếu bảng Document có một trường author_name (kiểu CharField), điều này sẽ vi phạm 3NF. Ta sẽ có chuỗi phụ thuộc: Document.id → author_id → author_name. Ở đây, author_name (thuộc tính không khóa) phụ thuộc vào author_id (thuộc tính không khóa khác). Điều này sẽ dẫn đến dị thường cập nhật (update anomaly): nếu một tác giả đổi tên, bạn sẽ phải cập nhật tất cả các bản ghi Document của tác giả đó, gây ra sự không nhất quán và tốn kém.
+
+Sau khi thay đổi (hiện tại): Bạn đã giải quyết vấn đề này một cách triệt để:
+
+Bạn đã tạo bảng Author riêng để lưu trữ thông tin tác giả (id, name).
+Bảng Document bây giờ chỉ chứa một khóa ngoại author_id để tham chiếu đến bảng Author.
+Bây giờ, các phụ thuộc trong bảng Document là:
+id → title
+id → description
+id → author_id
+Các thuộc tính không phải khóa (title, description) chỉ phụ thuộc trực tiếp vào khóa chính (id), không phụ thuộc vào author_id hay bất kỳ thuộc tính không phải khóa nào khác. Tên của tác giả (name) giờ đây phụ thuộc vào khóa chính của bảng Author, không còn liên quan bắc cầu đến Document.
+=> Kết luận: Đạt 3NF. Bằng cách tách Author ra thành một bảng riêng, bạn đã loại bỏ sự phụ thuộc bắc cầu và đạt được Chuẩn Dạng 3.

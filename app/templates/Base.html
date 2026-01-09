@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/icontab.png' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 flex flex-col min-h-screen">
+    {% if is_admin %}
+        {% include 'components/layout/AdminNavbar.html' %}
+    {% else %}
+        {% include 'components/layout/Navbar.html' %}
+    {% endif %}
+    
+    <main class="flex-grow">
+    {% block content %}
+    {% endblock %}
+    </main>
+
+    {% include 'components/layout/Footer.html' %}
+
+    <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
+
+    <script src="{% static 'js/toast.js' %}"></script>
+    
+    {% if messages %}
+    <script>
+        {% for message in messages %}
+            showToast('{{ message }}', '{{ message.tags }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        const html = document.querySelector('html');
+
+        const sunIcon = 'fa-sun';
+        const moonIcon = 'fa-moon';
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                html.classList.add('dark');
+                if (themeToggle) {
+                    themeToggle.innerHTML = `<i class="fas ${sunIcon}"></i>`;
+                }
+                if (themeToggleMobile) {
+                    themeToggleMobile.innerHTML = `<i class="fas ${sunIcon}"></i>`;
+                }
+            } else {
+                html.classList.remove('dark');
+                if (themeToggle) {
+                    themeToggle.innerHTML = `<i class="fas ${moonIcon}"></i>`;
+                }
+                if (themeToggleMobile) {
+                    themeToggleMobile.innerHTML = `<i class="fas ${moonIcon}"></i>`;
+                }
+            }
+        }
+
+        const storedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(storedTheme);
+
+        function toggleTheme() {
+            const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        }
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+        if (themeToggleMobile) {
+            themeToggleMobile.addEventListener('click', toggleTheme);
+        }
+    </script>
+</body>
+</html>
