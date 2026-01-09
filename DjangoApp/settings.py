@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 from dotenv import load_dotenv
@@ -30,6 +31,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000','https://8000-firebase-hty-company-1757746066281.cluster-w5vd22whf5gmav2vgkomwtc4go.cloudworkstations.dev','https://8000-firebase-d-1758042773528.cluster-ys234awlzbhwoxmkkse6qo3fz6.cloudworkstations.dev', 'https://hty-company.vercel.app']
+
 
 # Application definition
 
@@ -95,7 +97,7 @@ else:
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_validators = [
+AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },

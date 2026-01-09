@@ -573,6 +573,9 @@ def Search(request):
     
     return JsonResponse(data, safe=False)
 
+def SecretPage(request):
+  return render(request, 'secret/15102518.html')
+
 @user_passes_test(is_admin)
 def manage_departments(request):
     if request.method == 'POST':
