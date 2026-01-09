@@ -1,7 +1,7 @@
    <table>
   <tr>
     <td width="100" valign="middle">
-      <img src="app/static/images/icontab.png" alt="Logo ứng dụng" width="100">
+      <img src="app/static/images/icon.png" alt="Logo ứng dụng" width="100">
     </td>
     <td valign="middle">
       <h1>Ứng dụng Web Quản lý tài liệu nội bộ Công ty</h1>
